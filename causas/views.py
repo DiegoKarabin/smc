@@ -7,7 +7,7 @@ from .models import Causa, Actividad, Triaje
 from .forms import FormularioCausa, FormularioTriaje, FormularioActividad
 
 # Create your views here.
-
+ 
 
 @user_passes_test(logeado, login_url='/login/')
 def nueva_causa(request):

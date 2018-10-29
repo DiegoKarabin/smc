@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'causas',
     'talleres',
     'usuarios',
+    'administracion',
 ]
 
 MIDDLEWARE = [
