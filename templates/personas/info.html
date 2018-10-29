@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Información Personal{% endblock %}
+{% block nav_imputados %}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Información Personal</h1>
+			<p><b>Cédula de Identidad:</b> {{ persona.ci }}</p>
+			<p><b>Nombre Completo:</b> {{ persona.nombre }} {{ persona.apellido }}</p>
+			<p><b>Fecha de Nacimiento:</b> {{ persona.fecha_de_nacimiento }}</p>
+			<p><b>Lugar de Nacimiento:</b> {{ persona.lugar_de_nacimiento }}</p>
+			<p><b>Edad:</b> {{ persona.edad }}</p>
+			<p><b>Estado Civil:</b> {{ persona.estado_civil }}</p>
+			<p><b>Nacionalidad:</b> {{ persona.nacionalidad }}</p>
+			<p><b>Grado de Instrucción:</b> {{ persona.grado_de_instruccion }}</p>
+			<p><b>Dirección:</b> {{ persona.direccion }}</p>
+			<p><b>Teléfono:</b> {{ persona.telefono }}</p>
+			<p><b>Ocupación:</b> {{ persona.ocupacion }}</p>
+			<p><b>Dirección de Trabajo:</b> {{ persona.direccion_trabajo }}</p>
+			<p><b>Condición:</b> {{ persona.condicion }}</p>
+			<a href="/personas/modificar/{{ persona.ci }}/" class="btn btn-warning">Modificar</a>
+			<a href="/personas/eliminar/{{ persona.ci }}/" class="btn btn-danger">Eliminar</a>
+		</div>
+	</div>
+	<hr>
+	<br>
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Actividades</h2>
+			<form method="POST" action="/causas/actividades/nueva/">{% csrf_token %}
+				<input type="hidden" name="ci" value="{{ persona.ci }}">
+				<input type="submit" value="Registrar actividad" class="btn btn-primary">
+			</form>
+			<hr>
+			{% for actividad in persona.actividad_set.all %}
+				<p><b>Fecha:</b> {{ actividad.fecha }}</p>
+				<p><b>Descripción:</b> {{ actividad.descripcion }}</p>
+				<hr>
+			{% empty %}
+				<p>No hay actividades registradas.</p>
+			{% endfor %}
+		</div>
+		<div class="col-md-6">
+			<h2>Grupos de Taller</h2>
+			<form method="POST" action="/talleres/agregar_a_taller/">
+				{% csrf_token %}
+				<input type="hidden" name="ci" value="{{ persona.ci }}">
+				<input type="submit" value="Agregar a taller" class="btn btn-primary">
+			</form>
+			<hr>
+			{% for grupo in persona.grupo_set.get_queryset %}
+				<p><b>Nombre de grupo:</b> {{ grupo.nombre }}</p>
+				<p><b>Temática:</b> {{ grupo.tematica }}</p>
+				<hr>
+			{% empty %}
+				<p>Esta persona no está asignada a ningún grupo de taller.</p>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

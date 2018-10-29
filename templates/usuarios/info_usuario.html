@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Información de Usuario{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Información de Usuario</h1>
+			<p><b>Cédula de Identidad:</b> {{ usuario_consultado.ci }}</p>
+			<p><b>Nombre:</b> {{ usuario_consultado.nombre }}</p>
+			<p><b>Apellido:</b> {{ usuario_consultado.apellido }}</p>
+			<p><b>Profesión:</b> {{ usuario_consultado.profesion }}</p>
+			<p>
+				<b>Estado:</b>
+				{% if usuario_consultado.is_active %}
+				Activo
+				{% else %}
+				Inactivo
+				{% endif %}
+			</p>
+			{% if usuario_consultado.is_admin %}
+			<p>Este usuario es administrador.</p>
+			{% endif %}
+			<a href="/usuarios/modificar/{{ usuario_consultado.ci }}/" class="btn btn-info">Modificar</a>
+			{% if usuario_consultado.ci != user.ci %}
+			<a href="/usuarios/inhabilitar/{{ usuario_consultado.ci }}/" class="btn btn-warning">
+				{% if usuario_consultado.is_active %}
+				Inhabilitar
+				{% else %}
+				Habilitar
+				{% endif %}
+			</a>
+			<a href="/usuarios/eliminar/{{ usuario_consultado.ci }}/" class="btn btn-danger">Eliminar</a>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

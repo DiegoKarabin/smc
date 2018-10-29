@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{{ grupo.nombre }}{% endblock %}
+{% block nav_talleres %}active{% endblock nav_talleres %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="text-center">{{ grupo.nombre }}</h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<p><b>Temática:</b> {{ grupo.tematica }}</p>
+			<p><b>Fecha de Inicio:</b> {{ grupo.fecha_inicio }}</p>
+			<p><b>Fecha de Culminacion:</b> {{ grupo.fecha_final }}</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Participantes</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Cédula</th>
+						<th scope="col">Nombre</th>
+						<th scope="col">Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for participante in grupo.participantes.get_queryset %}
+					<tr>
+						<td>{{ participante.ci }}</td>
+						<td>{{ participante.nombre}} {{ participante.apellido}}</td>
+						<td>
+							<a href="/personas/{{ participante.ci }}/" class="btn btn-info">
+								Ver Información
+							</a>
+						</td>
+					</tr>
+				{% empty %}
+					<h2 class="text-center">No se han agregado participantes a este curso</h2>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock content %}

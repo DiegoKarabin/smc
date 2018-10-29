@@ -1,0 +1,148 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	{% block estaticos %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'fonts/css/fontawesome-all.min.css' %}">
+	<style media="screen">
+		.enlace { color: #000 }
+		.enlace:hover { color: --blue }
+	</style>
+	{% endblock %}
+	<title>{% block titulo %}SMC-EIVCM{% endblock %}</title>
+</head>
+<body>
+	<nav class="navbar navbar-dark navbar-expand-lg bg-primary" style="margin-bottom: 20px;">
+		<a href="/home" class="navbar-brand">SMC-EIVCM</a>
+
+		{% block logueado %}
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarColor">
+			 <ul class="navbar-nav mr-auto">
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle {% block nav_causas %}{% endblock %}" data-toggle="dropdown">
+						Causas
+					</a>
+					<ul class="dropdown-menu">
+						<li class="dropdown-item">
+							<a href="/causas/" class="dropdown-link">
+								Ver todas
+							</a>
+						</li>
+						<li class="dropdown-item">
+							<a href="/causas/ingreso/" class="dropdown-link">
+								Registrar ingreso
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle {% block nav_personas %}{% endblock %}" data-toggle="dropdown">
+						Personas
+					</a>
+					<ul class="dropdown-menu">
+						<li class="dropdown-item">
+							<a href="/personas/imputados/" class="dropdown-link">
+								Ver Imputados
+							</a>
+						</li>
+						<li class="dropdown-item">
+							<a href="/personas/victimas/" class="dropdown-link">
+								Ver Víctimas
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle {% block nav_talleres %}{% endblock %}" data-toggle="dropdown">
+						Talleres
+					</a>
+					<ul class="dropdown-menu">
+						<li class="dropdown-item">
+							<a href="/talleres/" class="dropdown-link">
+								Ver todos
+							</a>
+						</li>
+						<li class="dropdown-item">
+							<a href="/talleres/nuevo/" class="dropdown-link">
+								Crear Nuevo Taller
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				{% if user.is_admin %}
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link dropdown-toggle {% block nav_usuarios %}{% endblock %}" data-toggle="dropdown">
+						Usuarios
+					</a>
+					<ul class="dropdown-menu">
+						<li class="dropdown-item">
+							<a href="/usuarios/" class="dropdown-link">
+								Ver todos
+							</a>
+						</li>
+						<li class="dropdown-item">
+							<a href="/usuarios/agregar/" class="dropdown-link">
+								Registrar Nuevo Usuario
+							</a>
+						</li>
+					</ul>
+				</li>
+				{% endif %}
+
+				<li class="nav-item">
+					<a href="/estadisticas/" class="nav-link">
+						Estadísticas
+					</a>
+				</li>
+			</ul>
+
+			<ul class="nav nav-pills">
+				<li class="nav-item dropdown">
+
+				<a a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #fff; margin-right: 35px;">
+					{{ user.get_full_name }}
+				</a>
+
+				<ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+					<li class="dropdown-item">
+						<a class="dropdown-link" href="/usuarios/ver/{{ user.ci }}/">
+							Ver Perfil
+						</a>
+					</li>
+					<li class="dropdown-item">
+						<a class="dropdown-link" href="/usuarios/cambiar_clave/">
+							Cambiar Contraseña
+						</a>
+					</li>
+					<div class="dropdown-divider"></div>
+					<li class="dropdown-item">
+						<a class="dropdown-link" href="/logout">
+							Cerrar Sesión
+						</a>
+					</li>
+				</ul>
+				</li>
+			</ul>
+		</div>
+		{% endblock %}
+	</nav>
+
+	{% block content %}
+	{% endblock %}
+
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	{% block validaciones %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Grupos de Talleres{% endblock %}
+{% block nav_talleres %}active{% endblock nav_talleres %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="text-center">Grupos de Talleres</h1>
+		</div>
+	</div>
+	{% if not agregar %}
+	<div class="row">
+		<div class="col-md-3">
+			<a href="/talleres/nuevo/" class="btn btn-success" style="margin-bottom: 20px">
+				<i class="fa fa-plus"></i>
+				Agregar nuevo grupo
+			</a>
+		</div>
+		<div class="col-md-9">
+			<form class="form-inline" action="/talleres/buscar/" method="get">
+				<div class="input-prepend input-append">
+					<span class="add-on">Nombre de Grupo</span>
+					<input class="span2 form-control" name="nombre" id="appendedPrependedInput" type="text" required>
+					<button type="submit" class="btn">Buscar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	{% else %}
+	<br>
+	{% endif %}
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Nombre de grupo</th>
+						<th scope="col">Temática</th>
+						<th scope="col">Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for grupo in grupos %}
+					<tr>
+						<td>{{ grupo.nombre }}</td>
+						<td>{{ grupo.tematica }}</td>
+						<td>
+							<a href="/talleres/{{ grupo.nombre }}/{% if agregar %}agregar/{{ ci }}{% endif %}" class="btn btn-info">{% if agregar %}Agregar{% else %}Ver{% endif %}</a>
+						</td>
+					</tr>
+				{% empty %}
+					<h2 class="text-center">No hay grupos de taller disponibles.</h2>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock content %}

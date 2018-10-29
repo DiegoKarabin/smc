@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+    	<div class="row">
+    		<div class="col-md-12">
+    			<h1 class="text-center">Bienvenido al Sistema de Movimiento de Causas del Equipo Interdisciplinario de Violencia Contra la Mujer</h1>
+    		</div>
+    	</div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Acciones</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-border-info">
+                    <div class="card-header">
+                        <h3>Causas</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>
+                            <i class="fa fa-lg fa-search text-info"></i>
+                            Buscar causa
+                        </h4>
+                        <form class="form-inline" action="/causas/buscar/" method="get">
+            				<div class="input-append">
+                                <span class="add-on">Nro. de Expediente</span>
+            					<input class="span2 form-control" name="nro_expediente" id="appendedPrependedInput" type="text" required>
+            					<button type="submit" class="btn">Buscar</button>
+            				</div>
+            			</form>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/causas/" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-book text-warning"></i>
+                                    Ver todas
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/causas/ingreso/" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-plus text-success"></i>
+                                    Agregar nueva causa
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-border-info">
+                    <div class="card-header">
+                        <h3>Personas</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>
+                            <i class="fa fa-lg fa-search text-info"></i>
+                            Buscar persona
+                        </h4>
+                        <form class="form-inline" action="/personas/buscar/" method="get">
+            				<div class="input-append">
+            					<span class="add-on">Cédula</span>
+            					<input class="span2 form-control" name="ci" id="ci" type="text" required>
+            					<button type="submit" class="btn">Buscar</button>
+            				</div>
+            			</form>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/personas/victimas" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-female text-warning"></i>
+                                    Ver víctimas
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/personas/imputados" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-users text-danger"></i>
+                                    Ver imputados
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-border-info">
+                    <div class="card-header">
+                        <h3>Talleres</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>
+                            <i class="fa fa-lg fa-search text-info"></i>
+                            Buscar grupo
+                        </h4>
+                        <form class="form-inline" action="/talleres/buscar/" method="get">
+            				<div class="input-prepend input-append">
+            					<span class="add-on">Nombre de Grupo</span>
+            					<input class="span2 form-control" name="nombre" id="appendedPrependedInput" type="text" required>
+            					<button type="submit" class="btn">Buscar</button>
+            				</div>
+            			</form>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/talleres/" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-book text-warning"></i>
+                                    Ver todos
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/talleres/nuevo/" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-plus text-success"></i>
+                                    Agregar nuevo grupo
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            {% if user.is_admin %}
+            <div class="col-md-6">
+                <div class="card-border-info">
+                    <div class="card-header">
+                        <h3>Usuarios</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>
+                            <i class="fa fa-lg fa-search text-info"></i>
+                            Buscar usuario
+                        </h4>
+                        <form class="form-inline" action="/usuarios/buscar/" method="get">
+            				<div class="input-prepend input-append">
+            					<span class="add-on">Identificación</span>
+            					<input class="span2 form-control" name="identificacion" id="appendedPrependedInput" type="text" required>
+            					<button type="submit" class="btn">Buscar</button>
+            				</div>
+            			</form>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/usuarios/" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-users text-warning"></i>
+                                    Ver todos
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                        <p class="card-text">
+                            <a href="/usuarios/agregar/" class="enlace">
+                                <h4>
+                                    <i class="fa fa-lg fa-user-plus text-success"></i>
+                                    Agregar nuevo usuario
+                                </h4>
+                            </a>
+                        </p>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Causas{% endblock %}
+{% block nav_causas %}active{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<a href="/causas/ingreso/" class="btn btn-success">
+				<i class="fa fa-plus"></i>
+				Registrar un ingreso
+			</a>
+		</div>
+		<div class="col-md-9">
+			<form class="form-inline" action="/causas/buscar/" method="get">
+				<div class="input-append">
+					<input class="span2 form-control" name="nro_expediente" id="appendedPrependedInput" type="text" required>
+					<button type="submit" class="btn">Buscar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Numero de Expendiente</th>
+						<th scope="col">Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for causa in causas %}
+					<tr>
+						<th scope="row">{{ forloop.counter }}</th>
+						<td>{{ causa.nro_expediente }}</td>
+						<td>
+							<a href="/causas/ver/{{ causa.nro_expediente }}/" class="btn btn-info">Ver</a>
+						</td>
+					</tr>
+				{% empty %}
+					<h2 class="text-center">No hay causas registradas</h2>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

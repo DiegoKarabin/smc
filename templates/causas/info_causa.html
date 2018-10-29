@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Causa: {{ causa.nro_expediente }}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<a href="/causas/" class="btn btn-info">Ver todas las causas</a>
+			<h1 class="text-center">Información de la causa</h1>
+
+			<div class="card border-info mb-3" style="max-width: 30rem;">
+			  <div class="card-header"><b>Nro. Expediente:</b> {{ causa.nro_expediente }}</div>
+			  <div class="card-body">
+			    <!-- <h4 class="card-title">Info card title</h4> -->
+			    <p class="card-text">
+			    	<p><b>Procedencia:</b> {{ causa.procedencia }}</p>
+					<p><b>Delito:</b> {{ causa.delito }}</p>
+					<p><b>Solicitud:</b> {{ causa.solicitud }}</p>
+					<p><b>Fecha de ingreso:</b>{{ causa.fecha_ingreso }}</p>
+					<br>
+					
+					<p><b>Víctima{% ifnotequal victimas|length 1 %}s{% endifnotequal %}:</b></p>
+					<ul>
+					{% for victima in victimas %}
+						<li>{{ victima.ci }} - {{ victima.nombre }} {{ victima.apellido }} <a href="/causas/personas/{{ victima.ci }}/" class="btn btn-info">Ver Información</a></li>
+					{% empty %}
+						<p>No se han registrado víctimas.</p>
+					{% endfor %}
+					</ul>
+					<br>
+					
+					<p><b>Imputado{% ifnotequal imputados|length 1 %}s{% endifnotequal %}:</b></p>
+					<ul>
+					{% for imputado in imputados %}
+						<li>{{ imputado.ci }} - {{ imputado.nombre }} {{ imputado.apellido }} <a href="/causas/personas/{{ imputado.ci }}/" class="btn btn-info">Ver Información</a></li>
+					{% empty %}
+						<p>No se han registrado imputados.</p>
+					{% endfor %}
+					</ul>
+					<br>
+					<a href="/causas/personas/agregar-a-{{ causa.nro_expediente }}/" class="btn btn-primary">Agregar Persona</a>
+					<a href="/causas/modificar/{{ causa.nro_expediente }}/" class="btn btn-warning">Modificar</a>
+					<a href="/causas/eliminar/{{ causa.nro_expediente }}/" class="btn btn-danger">Eliminar</a>
+			    </p>
+			  </div>
+			</div>
+			<p></p>
+		</div>
+	</div>
+</div>
+{% endblock %}

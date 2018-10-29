@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block nav_causas %}active{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<h1 >{{ titulo }}</h1>
+			<form method="POST" class="form-control">{% csrf_token %}
+			{% for campo in formulario %}
+				{{ campo.errors }}
+				<label for="{{ campo.id_for_label }}" class="control-label">{{ campo.label }}</label>
+				{{ campo }}
+				<br>
+			{% endfor %}
+			{% block adicional %}{% endblock %}
+				<input type="submit" value="Guardar" id="id_submit" class="btn btn-primary">
+			</form>
+		</div>	
+	</div>
+</div>
+{% endblock %}

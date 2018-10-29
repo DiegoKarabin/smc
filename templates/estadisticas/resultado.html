@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">Estadística</h1>
+        </div>
+    </div>
+    <p class="text-right">
+        <button type="button" class="btn btn-info" onclick="imprimir()">Imprimir</button>
+    </p>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Ingresos</h2>
+            <p><b>Atendidos:</b> {{ causas_atendidas }}</p>
+            <p><b>Pendidentes:</b> {{ causas_pendientes }}</p>
+            <h3>Provenientes de:</h3>
+            {% for procedencia in procedencias %}
+            <p><b>{{ procedencia.tipo }}:</b> {{ procedencia.cantidad }}</p>
+            {% endfor %}
+            <hr>
+            <h2>Solicitudes</h2>
+            {% for solicitud in solicitudes %}
+            <p><b>{{ solicitud.tipo }}:</b> {{ solicitud.cantidad }}</p>
+            {% endfor %}
+            <hr>
+            <h2>Tipos de Delito</h2>
+            {% for delito in delitos %}
+            <p><b>{{ delito.tipo }}:</b> {{ delito.cantidad }}</p>
+            {% endfor %}
+            <hr>
+            <h2>Actividades Realizadas</h2>
+            {% for actividad in actividades %}
+            <p><b>{{ actividad.tipo }}:</b> {{ actividad.cantidad }}</p>
+            {% endfor %}
+            <hr>
+            <h2>Personas Atendidas</h2>
+            <p><b>Imputados:</b> {{ imputados }}</p>
+            <p><b>Víctimas:</b> {{ victimas }}</p>
+        </div>
+    </div>
+</div>
+<script>
+    function imprimir() {
+        nav = document.getElementsByTagName('nav')[0];
+        btn = document.getElementsByClassName('text-right')[0];
+
+        nav.style = 'display: none';
+        btn.style = 'display: none';
+
+        window.print();
+
+        nav.style = '';
+        btn.style = '';
+    }
+</script>
+{% endblock %}

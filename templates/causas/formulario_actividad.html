@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Registrar Actividad{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="text-center">Registrar actividad</h1>
+
+			<form method="POST" action="/causas/actividades/registrar">{% csrf_token %}
+				<div class="form-group">
+					{{ formulario.descripcion.errors }}
+					<label for="{{ formulario.descripcion.id_for_label }}" class="control-label">{{ formulario.descripcion.label }}</label>
+					{{ formulario.descripcion }}
+				</div>
+				<input type="hidden" name="ci" value="{{ ci }}">
+				<input type="submit" value="Registrar" class="btn btn-primary">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

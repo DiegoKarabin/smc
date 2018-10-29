@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Información Personal{% endblock %}
+{% block nav_victimas %}active{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="text-center">Información Personal</h1>
+			<p><b>Cédula de Identidad:</b> {{ persona.ci }}</p>
+			<p><b>Nombre:</b> {{ persona.nombre }}</p>
+			<p><b>Edad:</b> {{ persona.edad }}</p>
+			<hr>
+		</div>
+		<div class="col-md-12">
+			<h2>Actividades</h2>
+			<form method="POST" action="/causas/actividades/nueva/">
+				{% csrf_token %}
+				<input type="hidden" name="tipo" value="{{ persona.condicion }}">
+				<input type="hidden" name="ci" value="{{ persona.ci }}">
+				<input type="submit" value="Registrar actividad" class="btn btn-primary">
+			</form>
+			{% for actividad in victima.actividad_set.all %}
+				<p><b>Fecha:</b> {{ actividad.fecha }}</p>
+				<p><b>Descripción:</b> {{ actividad.descripcion }}</p>
+				<hr>
+			{% empty %}
+				<p>No hay actividades registradas.</p>
+			{% endfor %}
+		</div>
+			
+	</div>
+</div>
+{% endblock %}

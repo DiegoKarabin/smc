@@ -1,0 +1,11 @@
+{% extends 'formulario.html' %}
+
+{% block adicional %}
+<br>
+<p><b>Actividades:</b></p>
+<ul>
+{% for actividad in actividades %}
+	<li>{{ actividad.fecha }} - {{ actividad.descripcion }} <a href="/personas/remover/{{ actividad.id }}/de/{{ ci }}" class="btn btn-danger">Remover</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Agregar a taller{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<form method="POST" action="/talleres/agregar_participante" class="from-group">{% csrf_token %}
+				<input type="hidden" name="ci" value="{{ ci }}">
+				<select name="codigo_taller">
+				{% for taller in talleres %}
+					<option>{{ taller.codigo }} {{ taller.tematica }}</option>
+				{% endfor %}
+				</select>
+				<input type="submit" value="Agregar" class="btn btn-primary">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

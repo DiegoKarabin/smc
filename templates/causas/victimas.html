@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Víctimas{% endblock %}
+{% block nav_victimas %}active{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+		<table class="table table-hover">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">Cedula</th>
+		      <th scope="col">Nombre</th>
+		      <th scope="col">Accion</th>
+		    </tr>
+		  </thead>
+		{% for victima in victimas %}
+			<tbody>
+		    <tr class="table">
+		      <th scope="row">1</th>
+		      <td>{{ victima.ci }}</td>
+		      <td>{{ victima.nombre }}</td>
+		      <td><a href="/causas/personas/{{ victima.ci }}/" class="btn btn-success">Ver</a></td>
+		    </tr>
+		   </tbody>
+		{% empty %}
+			<h3 class="text-center">No hay victimas para mostrar. <a href="/causas/ingreso/">Registre una causa</a>.</h3>
+		{% endfor %}				
+		</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

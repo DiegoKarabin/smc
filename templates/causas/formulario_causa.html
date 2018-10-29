@@ -1,0 +1,18 @@
+{% extends 'formulario.html' %}
+
+{% block adicional %}
+<br>
+<p><b>Víctima{% ifnotequal victimas|length 1 %}s{% endifnotequal %}:</b></p>
+<ul>
+{% for victima in victimas %}
+	<li>{{ victima.ci }} - {{ victima.nombre }} {{ victima.apellido }} <a href="/causas/remover/{{ victima.ci }}/de/{{ nro_expediente }}" class="btn btn-danger">Remover</a></li>
+{% endfor %}
+</ul>
+<br>
+<p><b>Imputado{% ifnotequal imputados|length 1 %}s{% endifnotequal %}:</b></p>
+<ul>
+{% for imputado in imputados %}
+	<li>{{ imputado.ci }} - {{ imputado.nombre }} {{ imputado.apellido }} <a href="/causas/remover/{{ imputado.ci }}/de/{{ nro_expediente }}" class="btn btn-danger">Remover</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

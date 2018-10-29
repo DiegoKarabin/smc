@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Causa: {{ causa.nro_expediente }}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<a href="/causas/" class="btn btn-info">Ver todas las causas</a>
+			<h1 class="text-center">Información de la causa</h1>
+
+			<div class="row">
+				<div class="card border-info col-md-6" style="max-width: 30rem; margin: 5px;">
+				  <div class="card-header"><b>Nro. Expediente:</b> {{ causa.nro_expediente }}</div>
+				  <div class="card-body">
+				    <!-- <h4 class="card-title">Info card title</h4> -->
+				    <p class="card-text">
+				    	<p><b>Procedencia:</b> {{ causa.procedencia }}</p>
+						<p><b>Delito:</b> {{ causa.delito }}</p>
+						<p><b>Solicitud:</b> {{ causa.solicitud }}</p>
+						<p><b>Fecha de ingreso:</b>{{ causa.fecha_ingreso }}</p>
+						<p><b>Estado:</b> {{ causa.estado }}</p>
+						<br>
+
+						<p><b>Víctima{% ifnotequal victimas|length 1 %}s{% endifnotequal %}:</b></p>
+						<ul>
+						{% for victima in victimas %}
+							<li>{{ victima.ci }} - {{ victima.nombre }} {{ victima.apellido }} <a href="/personas/{{ victima.ci }}/" class="btn btn-info">Ver Información</a></li>
+						{% empty %}
+							<p>No se han registrado víctimas.</p>
+						{% endfor %}
+						</ul>
+						<br>
+
+						<p><b>Imputado{% ifnotequal imputados|length 1 %}s{% endifnotequal %}:</b></p>
+						<ul>
+						{% for imputado in imputados %}
+							<li>{{ imputado.ci }} - {{ imputado.nombre }} {{ imputado.apellido }} <a href="/personas/{{ imputado.ci }}/" class="btn btn-info">Ver Información</a></li>
+						{% empty %}
+							<p>No se han registrado imputados.</p>
+						{% endfor %}
+						</ul>
+						<br>
+						<a href="/personas/agregar-a-{{ causa.nro_expediente }}/" class="btn btn-primary">Agregar Persona</a>
+						{% if not causa.triaje %}
+							<a href="/causas/triaje/{{ causa.nro_expediente }}/" class="btn btn-success">
+								Triaje
+							</a>
+						{% endif %}
+						<a href="/causas/modificar/{{ causa.nro_expediente }}/" class="btn btn-warning">Modificar</a>
+						<a href="/causas/eliminar/{{ causa.nro_expediente }}/" class="btn btn-danger">Eliminar</a>
+				    </p>
+				  </div>
+				</div>
+				{% if causa.triaje %}
+				<div class="card border-info col-md-6">
+					<div class="card-header"><b>Triaje</b></div>
+					<div class="card-body">
+						<p class="card-text">
+							<h5>Genograma Imputado</h5>
+							<p>
+								{% if causa.triaje.genograma_imputado %}
+									{{ causa.triaje.genograma_imputado }}
+								{% else %}
+									No se ha agregado un genograma para el imputado
+								{% endif %}
+							</p>
+							<hr>
+							<h5>Genograma Víctima</h5>
+							<p>
+								{% if causa.triaje.genograma_victima %}
+									{{ causa.triaje.genograma_victima }}
+								{% else %}
+									No se ha agregado un genograma para la víctima
+								{% endif %}
+							</p>
+							<hr>
+							<h5>Testimonio Imputado</h5>
+							<p>
+								{% if causa.triaje.testimonio_imputado %}
+									{{ causa.triaje.testimonio_imputado }}
+								{% else %}
+									No se ha agregado un testimonio para el imputado
+								{% endif %}
+							</p>
+							<hr>
+							<h5>Testimonio Víctima</h5>
+							<p>
+								{% if causa.triaje.testimonio_victima %}
+									{{ causa.triaje.testimonio_victima }}
+								{% else %}
+									No se ha agregado un testimonio para la víctima
+								{% endif %}
+							</p>
+							<hr>
+							<h5>Impresión Diagnóstica</h5>
+							<p>
+								{% if causa.triaje.impresion_diagnostica %}
+									{{ causa.triaje.impresion_diagnostica }}
+								{% else %}
+									No se ha agregado un diagnóstico
+								{% endif %}
+							</p>
+							<hr>
+							<h5>Modalidad</h5>
+							<p>{{ causa.triaje.modalidad }}</p>
+							<hr>
+							<h5>Observaciones</h5>
+							<p>
+								{% if causa.triaje.observaciones %}
+									{{ causa.triaje.observaciones }}
+								{% else %}
+									No hay observaciones
+								{% endif %}
+							</p>
+							<hr>
+							<h5>Derivación a Equipo Interdisciplinario</h5>
+							<p>{{ causa.triaje.derivacion }}</p>
+							<hr>
+							<h5>Próxima Cita</h5>
+							<p>{{ causa.triaje.proxima_cita }}</p>
+							<hr>
+							<h5>Atendido por</h5>
+							<p>{{ causa.triaje.atendido_por }}</p>
+						</p>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

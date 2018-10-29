@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Usuarios{% endblock %}
+{% block nav_usuarios %}active{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="text-center">Usuarios</h1>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-3">
+			<a href="/usuarios/agregar/" class="btn btn-success text-center">
+				<i class="fa fa-plus"></i>
+				Agregar nuevo usuario
+			</a>
+		</div>
+		<div class="col-md-9">
+			<form class="form-inline" action="/usuarios/buscar/" method="get">
+				<div class="input-prepend input-append">
+					<span class="add-on">Identificación</span>
+					<input class="span2 form-control" name="identificacion" id="appendedPrependedInput" type="text" required>
+					<button type="submit" class="btn">Buscar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Identificación</th>
+						<th scope="col">Nombre Completo</th>
+						<th scope="col">Acción</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for usuario in usuarios %}
+					<tr>
+						<td>{{ usuario.ci }}</td>
+						<td>{{ usuario.get_full_name }}</td>
+						<td>
+							<a href="/usuarios/ver/{{ usuario.ci }}/" class="btn btn-info">Ver</a>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

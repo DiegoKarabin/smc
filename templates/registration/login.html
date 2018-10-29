@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Inicio de Sesión{% endblock %}
+{% block logueado %}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<h1>Inicio de Sesión</h1>
+		<form method="POST" class="form-control">{% csrf_token %}
+			{% if form.errors %}
+			<ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+				<li class="alert alert-danger" role="alert">El nombre de usuario o la clave son incorrectos.</p>
+			</ul>
+			{% endif %}
+			<label for="usuario" class="control-label">Usuario</label>
+			<input type="text" name="username" id="usuario" class="form-control">
+			<br>
+			<label for="clave" class="control-label">Contraseña</label>
+			<input type="password" name="password" id="clave" class="form-control">
+			<br>
+			<input type="submit" value="Iniciar Sesión" class="btn btn-primary">
+			<input type="hidden" name="next" value="{% if not next %}/home{% else %}{{ next|escape }}{% endif %}">
+		</form>
+	</div>
+</div>
+{% endblock %}

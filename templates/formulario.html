@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<h1 >{{ titulo }}</h1>
+			<form method="POST" class="form-control">{% csrf_token %}
+			{% for campo in formulario %}
+				{{ campo.errors }}
+				<label for="{{ campo.id_for_label }}" class="control-label">{{ campo.label }}</label>
+				{{ campo }}
+				<br>
+			{% endfor %}
+			{% block adicional %}{% endblock %}
+				<br>
+				<input type="submit" value="Guardar" id="id_submit" class="btn btn-primary">
+			</form>
+		</div>	
+	</div>
+</div>
+{% endblock %}
+
+{% block validaciones %}
+<script src="{% static 'js/errores_formularios.js' %}"></script>
+{% endblock %}
