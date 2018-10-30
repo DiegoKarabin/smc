@@ -6,10 +6,47 @@
 			<div class="col-md-12">
 				<h1 class="text-center">Configuración de la aplicación</h1>
 				<br>
-				<p>
-					Aca podrá configurar la aplicacion en cuanto a la gestion de la base de datos tal y tal
-				</p>
+				<h2 class="text-center text-primary">{{ titulo }}</h2>
+				<div class="list-group">
+					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">Habilitar Respaldos de seguridad</h5>
+							<p class="btn btn-success">Activado</p>
+						</div>
+						<p class="mb-1">
+							Habilite esta opcion para activar los respaldos de seguridad de los datos, y podra seleccionar el tipo de respaldo y el periodo de este.
+						</p>
+						<br>
+						<div class="opciones">
+							<button class="btn btn-success" disabled="">Activar</button>
+							<button class="btn btn-danger">Desactivar</button>
+						</div>
+					</a>
+					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1">Habilitar Respaldos de seguridad</h5>
+							<p class="btn btn-success">Activado</p>
+						</div>
+						<p class="mb-1">
+							Habilite esta opcion para activar los respaldos de seguridad de los datos, y podra seleccionar el tipo de respaldo y el periodo de este.
+						</p>
+						<br>
+						<div class="opciones">
+							<button class="btn btn-success" disabled="">Activar</button>
+							<button class="btn btn-danger">Desactivar</button>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
+
+	<script>
+		$(document).ready(function () {
+			var elementos = $('.list-group-item');
+			elementos.forEach(function (elemento) {
+				alert('Hola');
+			});
+		});
+	</script>
 {% endblock content %}

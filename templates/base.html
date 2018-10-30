@@ -13,7 +13,7 @@
 		.enlace:hover { color: --blue }
 	</style>
 	{% endblock %}
-	<title>{% block titulo %}SMC-EIVCM{% endblock %}</title>
+	<title>{% block titulo %}SMC{% endblock %}</title>
 </head>
 <body>
 	<nav class="navbar navbar-dark navbar-expand-lg bg-primary" style="margin-bottom: 20px;">
@@ -137,12 +137,13 @@
 		</div>
 		{% endblock %}
 	</nav>
+	
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 	{% block content %}
 	{% endblock %}
 
-	<script src="{% static 'js/jquery.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	{% block validaciones %}{% endblock %}
 </body>
 </html>
