@@ -28,5 +28,5 @@ urlpatterns = [
     path('talleres/', include('talleres.urls')),
     path('usuarios/', include('usuarios.urls')),
     path('estadisticas/', views.estadisticas),
-    path('gestion/', include('administracion.urls')),
+    path('gestion/', include('administracion.urls', namespace = 'gestion')),
 ]

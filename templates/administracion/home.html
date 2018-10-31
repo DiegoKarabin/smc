@@ -17,7 +17,7 @@
 				<div class="list-group">
 					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
 						<div class="d-flex w-100 justify-content-between">
-							<h5 class="mb-1">Habilitar Respaldos de seguridad</h5>
+							<h5 class="mb-1">Habilitar Respaldos de seguridad Automáticos</h5>
 							{% if respaldo.respaldo == 1 %}
 								<h3 class="badge badge-success">Habilitado</h3>
 							{% else %}
@@ -142,10 +142,10 @@
 			}
 
 			$('#btnActResp').click(function () {
-				$(location).attr('href', 'http://www.google.es');
+				$(location).attr('href', '{% url 'gestion:respaldo' %}');
 			});
 			$('#btnDesResp').click(function () {
-				$(location).attr('href', 'http://www.google.es');
+				$(location).attr('href', '{% url 'gestion:respaldo' %}');
 			});
 
 

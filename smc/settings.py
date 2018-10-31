@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'talleres',
     'usuarios',
     'administracion',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +136,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/var/backups'}

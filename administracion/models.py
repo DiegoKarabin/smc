@@ -4,9 +4,11 @@ from datetime import date
 
 
 class configuracionBDA(models.Model):
-	respaldo = models.BooleanField()
+	respaldo = models.IntegerField()
 	periodo = models.CharField(max_length=1)
-	ultima_respaldo = models.DateField(default = date.today())
-	ultima_importacion = models.DateField(default = date.today())
-	ultima_restauracion = models.DateField(default = date.today())
+
+class Bitacora(models.Model):
+	ultima_respaldo = models.DateField(date.today())
+	ultima_importacion = models.DateField(date.today())
+	ultima_restauracion = models.DateField(date.today())
 

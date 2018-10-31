@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 from django.contrib.auth.decorators import user_passes_test
 from smc.views import logeado
@@ -13,9 +13,10 @@ def home(request):
 
 @user_passes_test(logeado, login_url = '/login/')
 def configurarRespaldo(request):
-	if request.METHOD == 'POST':
-		configuracion = configuracionBDA.objects.get(id = 1)
-		configuracion.respaldo = request.respaldo
-		configuracion.save()
-
-	return render(request, "administracion/home.html")
+	respaldo = configuracionBDA.objects.get(id = 1)
+	if respaldo.respaldo == 1:
+		respaldo.respaldo = 0
+	else:
+		respaldo.respaldo = 1
+	respaldo.save()
+	return redirect('/gestion/home')
