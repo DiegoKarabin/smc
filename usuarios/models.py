@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from administracion.models import *
 # Create your models here.
 
 
@@ -26,7 +26,11 @@ class ManejadorUsuario(BaseUserManager):
             ci, nombre, apellido, profesion, password=password)
         usuario.is_admin = True
         usuario.save(using=self._db)
-
+        ConfBDA = configuracionBDA.objects.filter(id = 1)
+        if ConfBDA.exists() == False:
+            ConfBDA = configuracionBDA(respaldo = 0, periodo = 'A')
+            ConfBDA.save()
+            print("Configuracion de la base de datos establecida correctamente")
         return usuario
 
 

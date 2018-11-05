@@ -4,6 +4,7 @@ from django.contrib.auth.views import login, logout
 
 from causas.models import Causa, Actividad
 from personas.models import Persona
+from administracion.models import configuracionBDA
 
 def logeado(user):
     return user.is_authenticated
@@ -82,3 +83,7 @@ def estadisticas(request):
             'imputados': imputados,
             'victimas': victimas,
         })
+
+# def comprobacionRespaldo(request):
+    # comp = configuracionBDA.objects.get(id = 1)
+    # comp.fecha =

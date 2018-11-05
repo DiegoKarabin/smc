@@ -19,9 +19,12 @@ def configurarRespaldo(request):
 	respaldo = configuracionBDA.objects.get(id = 1)
 	if respaldo.respaldo == 1:
 		respaldo.respaldo = 0
+		p = Bitacora(descripcion = 'Apagado')
 	else:
 		respaldo.respaldo = 1
+		p = Bitacora(descripcion = 'Encendido')
 	respaldo.save()
+	p.save()
 	return redirect('/gestion/home')
 
 def crearRespaldo(request):
@@ -52,13 +55,24 @@ def crearRespaldo(request):
 					i += 1;
 				file_content += ");"
 		
-	print(file_content)
 	db.close()
-	file_name = "Backup " + str(date.today()) + ".sql"
+	file_name = "Backup " + str(date.today()) + ".txt"
 	file = open(file_name,'w')
-	file.write("Hola mundo")
+	file.write(file_content)
 	file.close()
-	response = HttpResponse(content_type='application/force-download')
-	response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
-	response['X-Sendfile'] = file
-	return response
+	bitacora = Bitacora(descripcion = 'Importacion')
+	bitacora.save()
+	return redirect('/gestion/home/')
+	# response = HttpResponse(content_type='application/force-download')
+	# response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
+	# response['X-Sendfile'] = file
+	# return response
+
+def cambiarPeriodo(request):
+	if request.method == 'POST':
+		 valor_nuevo = request.POST['periodo'] 
+		 valor = configuracionBDA.objects.get(id = 1)
+		 valor.periodo = valor_nuevo
+		 valor.save()
+		 print("¡Correcto!")
+		 return redirect('/gestion/home')

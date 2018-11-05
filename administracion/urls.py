@@ -5,7 +5,8 @@ from . import views
 app_name = 'apps'
 
 urlpatterns = [
-	path('home/', views.home),
+	path('home/', views.home, name = 'home'),
 	path('respaldo/', views.configurarRespaldo, name = 'respaldo'),
-	path('table/',views.crearRespaldo, name = 'table')
+	path('table/',views.crearRespaldo, name = 'table'),
+	path('change/',views.cambiarPeriodo, name = 'change'),
 ]

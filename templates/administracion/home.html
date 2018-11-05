@@ -44,40 +44,47 @@
 					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
 						<div class="d-flex w-100 justify-content-between">
 							<h5 class="mb-1">Periodo de respaldo</h5>
-							<h3 class="badge badge-danger">Desactivado</h3>
+							<h3 class="badge badge-success" id="valor-actual-periodo"></h3>
 						</div>
 						<div class="info">
+						<form action="{% url 'gestion:change' %}" method="POST">
+							{% csrf_token %}
+							<input type="hidden" value="{{ respaldo.periodo }}" id="valor-periodo">
 							<p class="mb-1">
 								Esta opcion es se activa automaticamente cuando se esta habilitado los respaldos de seguridad, por favor elija el perio de respaldos
 							</p>
 							<br>
+							<p>
+								Fecha de último respaldo:
+							</p>
 							<div class="opciones form-group">
 								<div class="form-check form-check-inline">
-									<input name="periodo" class="form-check-input" type="radio" id="diario" value="diario">
+									<input name="periodo" class="form-check-input" type="radio" id="diario" value="A">
 									<label class="form-check-label" for="diario">Diario</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input name="periodo" class="form-check-input" type="radio" id="semanal" value="semanal">
+									<input name="periodo" class="form-check-input" type="radio" id="semanal" value="B">
 									<label class="form-check-label" for="semanal">Semanal</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input name="periodo" class="form-check-input" type="radio" id="mensual" value="mensual">
+									<input name="periodo" class="form-check-input" type="radio" id="mensual" value="C">
 									<label class="form-check-label" for="mensual">Mensual</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input name="periodo" class="form-check-input" type="radio" id="trimestral" value="trimestral">
+									<input name="periodo" class="form-check-input" type="radio" id="trimestral" value="D">
 									<label class="form-check-label" for="trimestral">Trimestral</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input name="periodo" class="form-check-input" type="radio" id="semestral" value="semestral">
+									<input name="periodo" class="form-check-input" type="radio" id="semestral" value="E">
 									<label class="form-check-label" for="semestral">Semestral</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input name="periodo" class="form-check-input" type="radio" id="anual" value="anual">
+									<input name="periodo" class="form-check-input" type="radio" id="anual" value="F">
 									<label class="form-check-label" for="anual">Anual</label>
 								</div>
 								<input type="submit" class="btn btn-success" value="Guardar">
 							</div>
+						</form>
 						</div>
 					</a>
 					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -148,8 +155,32 @@
 				$(location).attr('href', '{% url 'gestion:respaldo' %}');
 			});
 
+			var periodo = $('#valor-periodo').val();
 
-
+			if (periodo == 'A'){
+				$('#diario').attr('checked','true');
+				$('#valor-actual-periodo').text('Diario');
+			}
+			else if (periodo == 'B') {
+				$('#semanal').attr('checked','true');
+				$('#valor-actual-periodo').text('Semanal');
+			}
+			else if (periodo == 'C') {
+				$('#mensual').attr('checked','true');
+				$('#valor-actual-periodo').text('Mensual');
+			}
+			else if (periodo == 'D') {
+				$('#trimestral').attr('checked','true');
+				$('#valor-actual-periodo').text('Trimestral');
+			}
+			else if (periodo == 'E') {
+				$('#semestral').attr('checked','true');
+				$('#valor-actual-periodo').text('Semestral');
+			}
+			else if (periodo == 'F') {
+				$('#anual').attr('checked','true');
+				$('#valor-actual-periodo').text('Anual');
+			}
 		});
 	</script>
 {% endblock content %}
