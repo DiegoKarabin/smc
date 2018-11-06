@@ -45,7 +45,7 @@ def crearRespaldo(request):
 
 		if len(registros):
 			for registro in registros:
-				file_content += "INSERT INTO `" + fila + "` VALUES ("
+				file_content += "INSERT IGNORE INTO `" + fila + "` VALUES ("
 				n = len(registro)
 				i = 0
 				for elemento in registro:
@@ -56,6 +56,7 @@ def crearRespaldo(request):
 				file_content += ");"
 		
 	db.close()
+	print(file_content)
 	file_name = "Backup " + str(date.today()) + ".txt"
 	file = open(file_name,'w')
 	file.write(file_content)
@@ -74,5 +75,8 @@ def cambiarPeriodo(request):
 		 valor = configuracionBDA.objects.get(id = 1)
 		 valor.periodo = valor_nuevo
 		 valor.save()
+		 bitacora = Bitacora(descripcion = 'CambioPeriodo')
 		 print("¡Correcto!")
 		 return redirect('/gestion/home')
+
+
