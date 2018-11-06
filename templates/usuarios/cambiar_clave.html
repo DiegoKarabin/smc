@@ -121,16 +121,17 @@
                 onFail();
         }
 
-        $('#id_password1').keyup(function() {
-            function toggleCompletedConditions(test, item) {
-                testCondition(test,
-                    function() {
-                    $(item).markAsCompleted();
-                },
+        function toggleCompletedConditions(test, item) {
+            testCondition(test,
                 function() {
-                    $(item).markAsIncompleted();
-                });
-            }
+                $(item).markAsCompleted();
+            },
+            function() {
+                $(item).markAsIncompleted();
+            });
+        }
+        
+        $('#id_password1').keyup(function() {
 
             var options = {
                 'charactersLengthRule': passwordLength($(this).val()),
@@ -141,8 +142,7 @@
                 'notOnlyLettersRule': notOnlyLetters($(this).val()),
                 'notBlankSpacesRule': notBlankSpaces($(this).val()),
                 'charactersQtyRule': moreThan2SpecialCharacters($(this).val()),
-                'consecutiveSpecialCharsRule': notConsecutiveSpecialCharacters($(this).val()),
-                'mustMatchRule': $(this).val() === $('#id_password2').val()
+                'consecutiveSpecialCharsRule': notConsecutiveSpecialCharacters($(this).val())
             };
 
             var enableButton = true;
@@ -162,6 +162,14 @@
             } else {
                 $('#id_submit').attr('disabled', 'disabled');
             }
+        });
+
+        function clavesIguales() {
+            return $('#id_password1').val() === $('#id_password2').val();
+        }
+
+        $('#id_password1, #id_password2').keyup(function() {
+            toggleCompletedConditions(clavesIguales(), '#mustMatchRule');
         });
     });
 </script>

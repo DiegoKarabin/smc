@@ -8,7 +8,10 @@ from smc.views import logeado
 # Create your views here.
 
 def es_admin(user):
-  return user.is_admin
+    return user.is_admin
+
+def es_mi_perfil(user, ci):
+    return user.is_admin or user.ci == ci
 
 @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def ver_usuarios(request):
@@ -35,16 +38,19 @@ def agregar_usuario(request):
                       'titulo': 'Agregar usuario'
                   })
 
-@user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
+# @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def ver_usuario(request, ci):
-    try:
-        usuario = Usuario.objects.get(ci=ci)
-    except:
-        return render(request, 'usuarios/no_existe.html')
-    return render(request, 'usuarios/info_usuario.html',
-      {
-        'usuario_consultado': usuario
-      })
+    if es_admin or request.user.ci == ci:
+        try:
+            usuario = Usuario.objects.get(ci=ci)
+        except:
+            return render(request, 'usuarios/no_existe.html')
+        return render(request, 'usuarios/info_usuario.html',
+          {
+            'usuario_consultado': usuario
+          })
+    else:
+        return redirect('/usuarios/sin_permiso')
 
 @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def buscar(request):
@@ -55,23 +61,35 @@ def buscar(request):
     else:
         return redirect('/usuarios/')
 
-@user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
+# @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def modificar_usuario(request, ci):
-    usuario = Usuario.objects.get(ci=ci)
-    formulario = forms.UserChangeForm(instance=usuario)
+    if es_admin(request.user) or request.user.ci == ci:
+        usuario = Usuario.objects.get(ci=ci)
 
-    if request.method == 'POST':
-        formulario = forms.UserChangeForm(request.POST, instance=usuario)
+        if es_admin(request.user):
+            formulario = forms.UserChangeForm(instance=usuario)
+        else:
+            formulario = forms.UserChangeFormNoAdmin(instance=usuario)
 
-        if formulario.is_valid():
-            formulario.save()
-            return redirect('/usuarios/ver/' + usuario.ci + '/')
+        if request.method == 'POST':
+            if es_admin(request.user):
+                formulario = forms.UserChangeForm(request.POST, instance=usuario)
+            else:
+                # data = dict(request.POST)
+                # data.update(is_active=True)
+                formulario = forms.UserChangeFormNoAdmin(request.POST, instance=usuario)
 
-    return render(request, 'usuarios/formulario_usuario.html',
-                  {
-                      'formulario': formulario,
-                      'titulo': 'Modificar usuario ' + usuario.get_full_name()
-                  })
+            if formulario.is_valid():
+                formulario.save()
+                return redirect('/usuarios/ver/' + usuario.ci + '/')
+
+        return render(request, 'usuarios/formulario_usuario.html',
+                      {
+                          'formulario': formulario,
+                          'titulo': 'Modificar usuario ' + usuario.get_full_name()
+                      })
+    else:
+        return redirect('/usuarios/sin_permiso/')
 
 @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def eliminar_usuario(request, ci):

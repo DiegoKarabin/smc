@@ -37,9 +37,7 @@ class UserCreationForm(forms.ModelForm):
 
         return user
 
-
 class UserChangeForm(forms.ModelForm):
-
     class Meta:
         model = Usuario
         fields = ('ci', 'nombre', 'apellido',
@@ -63,6 +61,31 @@ class UserChangeForm(forms.ModelForm):
             }),
         }
 
+class UserChangeFormNoAdmin(forms.ModelForm):
+    # is_active forms.BooleanField(widget=forms.HiddenInput)
+    class Meta:
+        model = Usuario
+        fields = ('ci', 'nombre', 'apellido',
+                  'profesion')
+        exclude = ('is_active', 'is_admin')
+        widgets = {
+            'ci': forms.TextInput(attrs={
+                'placeholder': 'Introduzca una identificación',
+                'class': 'form-control'
+            }),
+            'nombre': forms.TextInput(attrs={
+                'placeholder': 'Introduzca un nombre',
+                'class': 'form-control'
+            }),
+            'apellido': forms.TextInput(attrs={
+                'placeholder': 'Introduzca un apellido',
+                'class': 'form-control'
+            }),
+            'profesion': forms.TextInput(attrs={
+                'placeholder': 'Introduzca una profesión',
+                'class': 'form-control'
+            }),
+        }
 
 class PasswordChangeForm(forms.Form):
     error_css_class = 'alert alert-danger'

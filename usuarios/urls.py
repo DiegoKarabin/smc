@@ -11,5 +11,5 @@ urlpatterns = [
     path('eliminar/<ci>/', views.eliminar_usuario),
     path('inhabilitar/<ci>/', views.inhabilitar_usuario),
     path('cambiar_clave/', views.cambiar_clave),
-    path('no_tiene_permiso/', views.sin_permiso),
+    path('sin_permiso/', views.sin_permiso),
 ]
