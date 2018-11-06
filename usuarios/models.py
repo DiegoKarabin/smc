@@ -39,6 +39,7 @@ class Usuario(AbstractBaseUser):
     nombre = models.CharField(max_length=30)
     apellido = models.CharField(max_length=30)
     profesion = models.CharField(max_length=30)
+    email = models.EmailField()
     is_active = models.BooleanField('Activo', default=True)
     is_admin = models.BooleanField('Administrador', default=False)
 

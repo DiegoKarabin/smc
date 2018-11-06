@@ -7,7 +7,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['ci', 'nombre', 'apellido', 'profesion']
+        fields = ['ci', 'nombre', 'apellido', 'profesion', 'email']
 
         widgets = {
             'ci': forms.TextInput(attrs={
@@ -24,6 +24,10 @@ class UserCreationForm(forms.ModelForm):
             }),
             'profesion': forms.TextInput(attrs={
                 'placeholder': 'Introduzca una profesión',
+                'class': 'form-control'
+            }),
+            'email': forms.TextInput(attrs={
+                'placeholder': 'Introduzca un Correo',
                 'class': 'form-control'
             }),
         }
@@ -59,6 +63,10 @@ class UserChangeForm(forms.ModelForm):
             }),
             'profesion': forms.TextInput(attrs={
                 'placeholder': 'Introduzca una profesión',
+                'class': 'form-control'
+            }),
+            'email': forms.TextInput(attrs={
+                'placeholder': 'Introduzca un Correo',
                 'class': 'form-control'
             }),
         }

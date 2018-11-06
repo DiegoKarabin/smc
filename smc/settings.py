@@ -141,10 +141,3 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/var/backups'}
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com '
-EMAIL_PORT = 25 
-EMAIL_HOT_USER = 'correoejemplo@gmail.com '
-EMAIL_HOST_PASSWORD = 'password'
-EMAIL_BACKEND = 'django.core.mail.backend.smtp.EmailBackend'
