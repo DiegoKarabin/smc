@@ -30,8 +30,8 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('estadisticas/', views.estadisticas),
     path('gestion/', include('administracion.urls', namespace = 'gestion')),
-    # path('reset/password_reset', password_reset, {'template_name': 'registration/password_resert_form.html', 'email_template': 'registration/password_reset_email.html'}, name = password_reset),
-    # path('reset/password_reset_done', password_reset_done, {'template_name': 'registration/password_reset_done.html'}, name = 'password_reset_done'),
-    # path('reset/<uidb64>/<token>', password_reset_confirm, {'template_name':'registration/password_reset_confirm.html'}, name = 'password_reset_confirm'),
-    # path('reset/done', password_reset_complete, {'template_name':'registration/password_reset_complete.html'}, name = 'password_reset_complete')
+    path('reset/password_reset', password_reset, {'template_name': 'registration/password_resert_form.html', 'email_template': 'registration/password_reset_email.html'}, name = 'password_reset'),
+    path('reset/password_reset_done', password_reset_done, {'template_name': 'registration/password_reset_done.html'}, name = 'password_reset_done'),
+    path('reset/<uidb64>/<token>', password_reset_confirm, {'template_name':'registration/password_reset_confirm.html'}, name = 'password_reset_confirm'),
+    path('reset/done', password_reset_complete, {'template_name':'registration/password_reset_complete.html'}, name = 'password_reset_complete')
 ]
