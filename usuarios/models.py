@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from administracion.models import *
 # Create your models here.
 
+class Pregunta(models.Model):
+    pregunta = models.CharField(max_length=50)
 
 class ManejadorUsuario(BaseUserManager):
 
@@ -42,6 +44,9 @@ class Usuario(AbstractBaseUser):
     email = models.EmailField()
     is_active = models.BooleanField('Activo', default=True)
     is_admin = models.BooleanField('Administrador', default=False)
+    is_password_setted = models.BooleanField(default=False)
+    is_security_question_setted = models.BooleanField(default=False)
+    preguntas = models.ManyToManyField(Pregunta, through='PreguntaUsuario')
 
     objects = ManejadorUsuario()
 
@@ -57,3 +62,8 @@ class Usuario(AbstractBaseUser):
 
     def get_full_name(self):
         return self.nombre + ' ' + self.apellido
+
+class PreguntaUsuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
+    respuesta = models.CharField(max_length=30)

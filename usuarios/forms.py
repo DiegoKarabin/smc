@@ -70,7 +70,6 @@ class UserChangeForm(forms.ModelForm):
         }
 
 class UserChangeFormNoAdmin(forms.ModelForm):
-    # is_active forms.BooleanField(widget=forms.HiddenInput)
     class Meta:
         model = Usuario
         fields = ('ci', 'nombre', 'apellido',

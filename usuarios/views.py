@@ -123,6 +123,7 @@ def cambiar_clave(request):
         if formulario.is_valid():
             clave = formulario.cleaned_data['password2']
             request.user.set_password(clave)
+            request.user.is_password_setted = True
             request.user.save()
             return redirect('/login/')
 
