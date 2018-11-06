@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from .models import Usuario
 from . import forms
+from smc.views import logeado
 
 # Create your views here.
 
@@ -93,6 +94,7 @@ def inhabilitar_usuario(request, ci):
     else:
         return redirect('/usuarios/')
 
+@user_passes_test(logeado, login_url='/login/')
 def cambiar_clave(request):
     formulario = forms.PasswordChangeForm()
 
@@ -106,7 +108,7 @@ def cambiar_clave(request):
             request.user.save()
             return redirect('/login/')
 
-    return render(request, 'usuarios/formulario_usuario.html',
+    return render(request, 'usuarios/cambiar_clave.html',
                   {
                       'formulario': formulario,
                       'titulo': 'Cambiar Contraseña'

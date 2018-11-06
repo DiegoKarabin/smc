@@ -1,0 +1,168 @@
+{% extends 'formulario.html' %}
+
+{% load staticfiles %}
+
+{% block condiciones %}
+<div class="col-6">
+	<h3>Su contraseña debe cumplir con:</h3>
+    <div class="card">
+        <div class="card-body">
+            <ul id="restrictions">
+                <li id="charactersLengthRule">
+                    Longitud entre 8 y 15 caracteres.
+                </li>
+                <li id="lettersQtyRule">
+                    Más de 2 letras.
+                </li>
+                <li id="numbersQtyRule">
+                    Más de 2 números.
+                </li>
+                <li id="consecutiveNumbersRule">
+                    No debe haber 2 números consecutivos.
+                </li>
+                <li id="notOnlyNumbersRule">
+                    No puede estar compuesta solo por números.
+                </li>
+                <li id="notOnlyLettersRule">
+                    No puede estar compuesta solo por letras.
+                </li>
+                <li id="notBlankSpacesRule">
+                    No puede tener espacios en blanco.
+                </li>
+                <li id="charactersQtyRule">
+                    Más de 2 de los siguientes caracteres: %, _, -, &amp;, #, =, $, @.
+                </li>
+                <li id="consecutiveSpecialCharsRule">
+                    No debe haber 2 caracteres especiales consecutivos.
+                </li>
+                <li id="mustMatchRule">
+                	Las contraseñas deben coincidir.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block validaciones %}
+<script src="{% static 'js/entropizer.min.js' %}"></script>
+<script src="{% static 'js/jquery-entropizer.min.js' %}"></script>
+<script src="{% static 'js/rules.js' %}"></script>
+<script>
+    $(document).ready(function () {
+    	$('#id_submit').attr('disabled', 'disabled');
+
+    	var formulario = $('#formulario');
+
+    	$('<div>')
+    		.attr('id', 'meter')
+    		.attr('style', 'margin-top: 5px')
+    		.appendTo(formulario);
+        var max = 70;
+        $('#meter').entropizer({
+            target: '#id_password1',
+            maximum: max,
+            buckets: [
+                { max: 40, suffix: 'danger', label: 'Baja' },
+                { min: 40, max: 55, suffix: 'warning', label: 'Media' },
+                { min: 55, max: max, suffix: 'success', label: 'Alta' },
+                { min: max, suffix: 'info', label: 'Muy Alta' }
+            ],
+            create: function(container) {
+                var wrapper = $('<div>').addClass('progress progress-striped').appendTo(container);
+                var bar = $('<div>').addClass('progress-bar')
+                    .attr({
+                        'role': 'progressbar',
+                        'aria-valuemin': 0,
+                        'aria-valuemax': max
+                    })
+                    .appendTo(wrapper);
+
+                return {
+                    wrapper: wrapper,
+                    bar: bar,
+                };
+            },
+            update: function(data, ui) {
+                ui.bar.css({
+                        'width': data.percent + '%'
+                    })
+                    .attr({
+                        'aria-valuenow': data.entropy
+                    })
+                    .text(data.label);
+
+                ui.bar[0].className = 'progress-bar bg-' + data.suffix;
+            },
+            destroy: function(ui) {
+                ui.wrapper.remove();
+            }
+        });
+
+        $.fn.swappClasses = function(a, b) {
+            this.removeClass(a);
+            this.addClass(b);
+        };
+
+        $.fn.markAsCompleted = function() {
+            this.swappClasses('text-danger', 'text-success');
+        };
+
+        $.fn.markAsIncompleted = function() {
+            this.swappClasses('text-success', 'text-danger');
+        };
+
+        $('#restrictions li').markAsIncompleted();
+
+        function testCondition(test, onSuccess, onFail) {
+            if (test)
+                onSuccess();
+            else
+                onFail();
+        }
+
+        $('#id_password1').keyup(function() {
+            function toggleCompletedConditions(test, item) {
+                testCondition(test,
+                    function() {
+                    $(item).markAsCompleted();
+                },
+                function() {
+                    $(item).markAsIncompleted();
+                });
+            }
+
+            var options = {
+                'charactersLengthRule': passwordLength($(this).val()),
+                'lettersQtyRule': moreThan2Letters($(this).val()),
+                'numbersQtyRule': moreThan2Numbers($(this).val()),
+                'consecutiveNumbersRule': notConsecutiveNumbers($(this).val()),
+                'notOnlyNumbersRule': notOnlyNumbers($(this).val()),
+                'notOnlyLettersRule': notOnlyLetters($(this).val()),
+                'notBlankSpacesRule': notBlankSpaces($(this).val()),
+                'charactersQtyRule': moreThan2SpecialCharacters($(this).val()),
+                'consecutiveSpecialCharsRule': notConsecutiveSpecialCharacters($(this).val()),
+                'mustMatchRule': $(this).val() === $('#id_password2').val()
+            };
+
+            var enableButton = true;
+
+            for (var option in options) {
+                var value = options[option];
+
+                toggleCompletedConditions(value, '#' + option);
+
+                if (enableButton) {
+                    enableButton = value;
+                }
+            }
+
+            if (enableButton) {
+                $('#id_submit').removeAttr('disabled');
+            } else {
+                $('#id_submit').attr('disabled', 'disabled');
+            }
+        });
+    });
+</script>
+{% endblock %}
