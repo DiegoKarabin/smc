@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.hashers import make_password, check_password
 from administracion.models import *
 # Create your models here.
 
 class Pregunta(models.Model):
-    pregunta = models.CharField(max_length=50)
+    pregunta = models.CharField(max_length=60)
 
 class ManejadorUsuario(BaseUserManager):
 
@@ -27,6 +28,7 @@ class ManejadorUsuario(BaseUserManager):
         usuario = self.create_user(
             ci, nombre, apellido, profesion, password=password)
         usuario.is_admin = True
+        usuario.is_password_setted = True
         usuario.save(using=self._db)
         ConfBDA = configuracionBDA.objects.filter(id = 1)
         if ConfBDA.exists() == False:
@@ -44,6 +46,7 @@ class Usuario(AbstractBaseUser):
     email = models.EmailField()
     is_active = models.BooleanField('Activo', default=True)
     is_admin = models.BooleanField('Administrador', default=False)
+    is_audit = models.BooleanField('Auditor', default=False)
     is_password_setted = models.BooleanField(default=False)
     is_security_question_setted = models.BooleanField(default=False)
     preguntas = models.ManyToManyField(Pregunta, through='PreguntaUsuario')
@@ -66,4 +69,10 @@ class Usuario(AbstractBaseUser):
 class PreguntaUsuario(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     pregunta = models.ForeignKey(Pregunta, on_delete=models.CASCADE)
-    respuesta = models.CharField(max_length=30)
+    respuesta = models.CharField('Respuesta', max_length=80)
+
+    def setRespuesta(self, respuesta):
+        self.respuesta = make_password(respuesta)
+
+    def es_respuesta_correcta(self, respuesta)
+        return check_password(respuesta, self.respuesta)

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from datetime import date
 from django.contrib.auth.decorators import user_passes_test
-from smc.views import logeado
+from smc.views import logeado,is_audit
 from administracion.models import *
 import MySQLdb
 
@@ -9,12 +9,12 @@ from wsgiref.util import FileWrapper
 
 # Create your views here.
 
-@user_passes_test(logeado, login_url = '/login/')
+@user_passes_test(is_audit, login_url = '/usuarios/sin_permiso/')
 def home(request):
 	respaldo = configuracionBDA.objects.get(id = 1)
 	return render(request, "administracion/home.html",{'respaldo' : respaldo})
 
-@user_passes_test(logeado, login_url = '/login/')
+@user_passes_test(is_audit, login_url = '/usuarios/sin_permiso/')
 def configurarRespaldo(request):
 	respaldo = configuracionBDA.objects.get(id = 1)
 	if respaldo.respaldo == 1:
@@ -68,7 +68,7 @@ def crearRespaldo(request):
 	# response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
 	# response['X-Sendfile'] = file
 	# return response
-
+@user_passes_test(is_audit, login_url = '/usuarios/sin_permiso/')
 def cambiarPeriodo(request):
 	if request.method == 'POST':
 		 valor_nuevo = request.POST['periodo'] 

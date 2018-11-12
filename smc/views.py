@@ -9,6 +9,9 @@ from administracion.models import configuracionBDA
 def logeado(user):
     return user.is_authenticated
 
+def is_audit(user):
+    return user.is_audit
+
 def login_(request):
 	return login(request)
 

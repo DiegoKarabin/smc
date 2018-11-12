@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
 
-from .models import Usuario
+from .models import Usuario, Pregunta, PreguntaUsuario
 from . import forms
 from smc.views import logeado
 
@@ -134,8 +134,28 @@ def cambiar_clave(request):
                   })
 
 @user_passes_test(logeado, login_url='/login/')
-def preguntas_seguridad:
-    pass
+def preguntas_seguridad(request):
+    if request.method == 'POST':
+        def relate_question_user(question_index, user, answer):
+            question = Pregunta.objects.get(id=question_index)
+            qu = PreguntaUsuario(usuario=user, pregunta=question)
+            qu.setRespuesta(answer)
+            qu.save()
+
+        relate_question_user(request.POST['question1'], request.user, request.POST['answer1'])
+        relate_question_user(request.POST['question2'], request.user, request.POST['answer2'])
+
+        request.user.is_security_question_setted = True
+        request.user.save()
+        return redirect('/home/')
+
+    preguntas = Pregunta.objects.all()
+
+    return render(request, 'usuarios/formulario_preguntas.html',
+                  {
+                      'titulo': 'Establecer preguntas de seguridad',
+                      'preguntas': preguntas,
+                  })
 
 def sin_permiso(request):
     return render(request, 'usuarios/sin_permiso.html')

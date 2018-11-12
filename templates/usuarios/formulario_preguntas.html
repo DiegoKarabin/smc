@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h1>{{ titulo }}</h1>
+			<form id="preguntasForm" method="POST" class="form-control">{% csrf_token %}
+				<label for="question1">Pregunta de seguridad #1</label>
+				<select name="question1" id="question1" class="form-control unique-choices">
+					<option value="">Seleccione una pregunta de seguridad</option>
+					{% for pregunta in preguntas %}
+					<option value="{{ pregunta.id }}">
+						{{ pregunta.pregunta }}
+					</option>
+					{% endfor %}
+				</select>
+				<label for="answer1">Respuesta</label>
+				<input type="password" name="answer1" id="answer1" class="form-control">
+				<br>
+				<label for="question2">Pregunta de seguridad #2</label>
+				<select name="question2" id="question2" class="form-control unique-choices">
+					<option value="">Seleccione una pregunta de seguridad</option>
+					{% for pregunta in preguntas %}
+					<option value="{{ pregunta.id }}">
+						{{ pregunta.pregunta }}
+					</option>
+					{% endfor %}
+				</select>
+				<label for="answer2">Respuesta</label>
+				<input type="password" name="answer2" id="answer2" class="form-control">
+				<br>
+				<input type="submit" value="Guardar" id="btnSubmit" class="btn btn-primary">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block validaciones %}
+<script src="{% static 'js/errores_formularios.js' %}"></script>
+<script>
+	$(document).ready(function() {
+		var question_removed = undefined;
+
+		$('.unique-choices').change(function() {
+			var current_value = $(this).val();
+			if (question_removed) {
+				$('.unique-choices').each(function(_, element) {
+					var options = $(element).children();
+
+					for (var option of options) {
+						if ($(option).prop('value') > $(question_removed).prop('value')) {
+							$(option).before(question_removed);
+						}
+					}
+				});
+			}
+
+			if (current_value) {
+				$('.unique-choices').each(function(_, element) {
+					if ($(element).val() != current_value) {
+						var options = $(element).children();
+
+						for (var option of options) {
+							if ($(option).prop('value') == current_value) {
+								question_removed = option;
+								$(option).remove();
+							}
+						}
+					}
+				});
+			}
+		});
+
+		$('#btnSubmit').click(function(event) {
+			var error = false;
+			event.preventDefault();
+
+			$('.alert').remove();
+
+			if (!$('#question1').val()) {
+				$('#question1').before(
+					'<div class="alert alert-danger">Por favor seleccione una pregunta</div>');
+				error |= true;
+			}
+
+			if (!$('#answer1').val()) {
+				$('#answer1').before(
+					'<div class="alert alert-danger">Por favor escriba su respuesta</div>');
+				error |= true;
+			}
+
+			if (!$('#question2').val()) {
+				$('#question2').before(
+					'<div class="alert alert-danger">Por favor seleccione una pregunta</div>');
+				error |= true;
+			}
+
+			if (!$('#answer2').val()) {
+				$('#answer2').before(
+					'<div class="alert alert-danger">Por favor escriba su respuesta</div>');
+				error |= true;
+			}
+
+			if (!error) {
+				$('#preguntasForm').submit();
+			}
+		});
+	});
+</script>
+{% endblock %}

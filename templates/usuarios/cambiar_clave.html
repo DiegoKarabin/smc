@@ -132,6 +132,8 @@
         }
         
         $('#id_password1').keyup(function() {
+            if ($(this).val().length >= 15)
+                return false;
 
             var options = {
                 'charactersLengthRule': passwordLength($(this).val()),
