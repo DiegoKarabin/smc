@@ -19,8 +19,6 @@
 			<br>
 			<label for="clave" class="control-label">Contraseña</label>
 			<input type="password" name="password" id="clave" class="form-control">
-			<br>
-			<a href="{% url 'password_reset' %}">¿Ha olvidado su contraseña?</a>
 			<br><br>
 			<input type="submit" value="Iniciar Sesión" class="btn btn-primary">
 			<input type="hidden" name="next" value="{% if not next %}/home{% else %}{{ next|escape }}{% endif %}">

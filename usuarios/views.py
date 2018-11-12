@@ -133,5 +133,9 @@ def cambiar_clave(request):
                       'titulo': 'Cambiar Contraseña'
                   })
 
+@user_passes_test(logeado, login_url='/login/')
+def preguntas_seguridad:
+    pass
+
 def sin_permiso(request):
-  return render(request, 'usuarios/sin_permiso.html')
+    return render(request, 'usuarios/sin_permiso.html')
