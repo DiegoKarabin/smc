@@ -5,6 +5,9 @@ from smc.views import logeado,is_audit
 from administracion.models import *
 import MySQLdb
 
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+
 from wsgiref.util import FileWrapper
 
 # Create your views here.
@@ -56,18 +59,22 @@ def crearRespaldo(request):
 				file_content += ");"
 		
 	db.close()
-	print(file_content)
-	file_name = "Backup " + str(date.today()) + ".txt"
-	file = open(file_name,'w')
-	file.write(file_content)
-	file.close()
+	name = 'Backup.'+ str(date.today()) + ".txt" 
+	path = default_storage.save(name, ContentFile(file_content))
+	# print(file_content)
+	# file_path = os.path.join(settings.MEDIA_ROOT, path)
+	# file_name = "Backup " + str(date.today()) + ".txt"
+	# file = open(file_name,'w')
+	# file.write(file_content)
+	# file.close()
 	bitacora = Bitacora(descripcion = 'Importacion')
 	bitacora.save()
-	return redirect('/gestion/home/')
-	# response = HttpResponse(content_type='application/force-download')
-	# response['Content-Disposition'] = 'attachment; filename={}'.format(file_name)
-	# response['X-Sendfile'] = file
-	# return response
+	# return redirect('/gestion/home/')
+	response = HttpResponse(content_type='application/force-download')
+	response['Content-Disposition'] = 'attachment; filename={}'.format(name)
+	response['X-Sendfile'] = path
+	return response
+
 @user_passes_test(is_audit, login_url = '/usuarios/sin_permiso/')
 def cambiarPeriodo(request):
 	if request.method == 'POST':

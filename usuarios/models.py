@@ -74,5 +74,5 @@ class PreguntaUsuario(models.Model):
     def setRespuesta(self, respuesta):
         self.respuesta = make_password(respuesta)
 
-    def es_respuesta_correcta(self, respuesta)
+    def es_respuesta_correcta(self, respuesta):
         return check_password(respuesta, self.respuesta)
