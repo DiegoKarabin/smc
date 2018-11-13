@@ -25,7 +25,11 @@
 							{% endif %}
 						</div>
 						<div class="info">
-							<span>El ultimo respaldo fue: {{ respaldo.ultima_respaldo }}</span>
+							{% if respaldo.ultimo_respaldo %}
+								<span>El ultimo respaldo fue: {{ respaldo.ultimo_respaldo }}</span>
+							{% else %}
+							    <span>El ultimo respaldo fue: No se han realizado respaldos</span>
+							{% endif %}
 							<p class="mb-1">
 								Habilite esta opcion para activar los respaldos de seguridad de los datos, y podra seleccionar el tipo de respaldo y el periodo de este.
 							</p>
@@ -54,9 +58,11 @@
 								Esta opcion es se activa automaticamente cuando se esta habilitado los respaldos de seguridad, por favor elija el perio de respaldos
 							</p>
 							<br>
-							<p>
-								Fecha de último respaldo:
-							</p>
+							{% if respaldo.ultimo_respaldo %}
+								<p>Ultimo respaldo: {{ respaldo.ultimo_respaldo }}</p>
+							{% else %}
+							    <p>Ultimo respaldo: No se ha realizado respaldo alguna</p>
+							{% endif %}
 							<div class="opciones form-group">
 								<div class="form-check form-check-inline">
 									<input name="periodo" class="form-check-input" type="radio" id="diario" value="A">
@@ -92,12 +98,17 @@
 							<h5 class="mb-1">Exportar Base de datos</h5>
 						</div>
 						<div class="info">
+							{% if respaldo.uitima_exportacion %}
+								<p>Ultima exportación: {{ respaldo.uitima_exportacion }}</p>
+							{% else %}
+							    <p>Ultima exportación: No se ha realizado exportación alguna</p>
+							{% endif %}
 							<p class="mb-1">
 								Haga un respaldo de su base de datos haciendo clic en el siguiente boton: 
 							</p>
 							<br>
 							<div class="opciones">
-								<button class="btn btn-success">Descargar Respaldo</button>
+								<button class="btn btn-success" id="exportar">Descargar Respaldo</button>
 							</div>
 						</div>
 					</a>
@@ -106,18 +117,19 @@
 							<h5 class="mb-1">Importar base de datos</h5>
 						</div>
 						<div class="info">
+							{% if respaldo.ultima_importacion %}
+								<p>Ultima importacion: {{ respaldo.ultima_importacion }}</p>
+							{% else %}
+							    <p>Ultima importacion: No se ha realizado importacion alguna</p>
+							{% endif %}
 							<p class="mb-1">
 								Para reastaurar la base de datos a una copia vieja haga clic en el siguiente boton y busque el archivo sql donde está toda la información.	
 							</p>
 							<br>
 							<div class="opciones">
-								<!-- <div class="custom-file">
-									<input type="file" class="custom-file-input" id="file" accept=".sql">
-									<label class="custom-file-label" for="file">Seleccione un archivo</label>
-								</div> -->
-								<input type="file" accept=".sql" class="form-control">
+								<input type="file" class="form-control" id="inputRestaurar">
 								<br>	
-								<input type="submit" class="btn btn-success" value="Restaurar">
+								<button class="btn btn-success" id="btnRestaurar">Restaurar</button>
 							</div>
 						</div>
 					</a>
@@ -154,6 +166,17 @@
 			$('#btnDesResp').click(function () {
 				$(location).attr('href', '{% url 'gestion:respaldo' %}');
 			});
+			$('#exportar').click(function () {
+				$(location).attr('href', '{% url 'gestion:exportar' %}')
+			});
+			$('#btnRestaurar').click(function () {
+				if ($('#inputRestaurar').val() == '') {
+					alert('Debe seleccionar un archivo para restaurar');
+				} else {
+					$(location).attr('href', '{% url 'gestion:restauracion' %}')
+				}
+			});
+
 
 			var periodo = $('#valor-periodo').val();
 

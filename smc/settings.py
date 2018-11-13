@@ -140,6 +140,4 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-
-DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/var/backups'}
+MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'),)
