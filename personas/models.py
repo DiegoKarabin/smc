@@ -65,6 +65,8 @@ class Persona(models.Model):
     direccion_trabajo = models.CharField(max_length=50, default='', blank=True)
     condicion = models.CharField(
         'Condición', max_length=8, choices=OPCIONES_CONDICION, blank=True)
+    edit = models.BooleanField(default=False)
+    is_editing = models.CharField(max_length=9 ,default=0)
 
     @property
     def edad(self):

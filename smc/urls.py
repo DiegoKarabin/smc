@@ -30,4 +30,5 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('estadisticas/', views.estadisticas),
     path('gestion/', include('administracion.urls', namespace = 'gestion')),
+    path('edit_bloqueado.html', views.edit_bloqueado),
 ]

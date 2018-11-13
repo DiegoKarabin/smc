@@ -94,26 +94,38 @@ def registrar_actividad(request):
 def modificar_causa(request, nro_expediente):
     causa = Causa.objects.get(nro_expediente=nro_expediente)
 
-    if request.method == 'POST':
-        formulario = FormularioCausa(request.POST, instance=causa)
+    if causa.edit == False:
+        causa.edit = True
+        causa.is_editing = request.user.ci
+        causa.save()
 
-        if formulario.is_valid():
-            formulario.save()
-            return redirect('/causas/ver/' + nro_expediente + '/')
+    else:
+        if causa.edit == True and request.user.ci == causa.is_editing:
 
-    formulario = FormularioCausa(instance=causa)
-    victimas = causa.personas.get_queryset().filter(condicion=Persona.VICTIMA)
-    imputados = causa.personas.get_queryset().filter(
-        condicion=Persona.IMPUTADO)
+          if request.method == 'POST':
+              formulario = FormularioCausa(request.POST, instance=causa)
 
-    return render(request, 'causas/formulario_causa.html',
-                  {
-                      'formulario': formulario,
-                      'titulo': 'Modificar ' + nro_expediente,
-                      'nro_expediente': nro_expediente,
-                      'victimas': victimas,
-                      'imputados': imputados
-                  })
+              if formulario.is_valid():
+                  causa.edit = False
+                  causa.save()
+                  formulario.save()
+                  return redirect('/causas/ver/' + nro_expediente + '/')
+
+          formulario = FormularioCausa(instance=causa)
+          victimas = causa.personas.get_queryset().filter(condicion=Persona.VICTIMA)
+          imputados = causa.personas.get_queryset().filter(
+              condicion=Persona.IMPUTADO)
+
+          return render(request, 'causas/formulario_causa.html',
+                        {
+                            'formulario': formulario,
+                            'titulo': 'Modificar ' + nro_expediente,
+                            'nro_expediente': nro_expediente,
+                            'victimas': victimas,
+                            'imputados': imputados
+                        })
+        else:
+          return redirect('/edit_bloqueado.html')
 
 
 @user_passes_test(logeado, login_url='/login')

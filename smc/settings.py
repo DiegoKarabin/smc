@@ -94,7 +94,8 @@ DATABASES = {
         'NAME': 'smc',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': 'localhost'
+        'HOST': 'localhost',
+        'ATOMIC_REQUEST': 'True'
     }
 }
 
@@ -140,4 +141,6 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'),)
+
+DBBACKUP_STORAGE = 'dbbackup.storage.filesystem_storage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/var/backups'}

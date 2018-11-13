@@ -118,6 +118,8 @@ class Causa(models.Model):
     personas = models.ManyToManyField(Persona)
     estado = models.CharField(max_length=9, choices=OPCIONES_ESTADO,
         default=PENDIENTE)
+    edit = models.BooleanField(default=False)
+    is_editing = models.CharField(max_length=9, default=0)
 
 
 class Actividad(models.Model):

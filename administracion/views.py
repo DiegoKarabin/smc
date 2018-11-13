@@ -4,18 +4,11 @@ from django.contrib.auth.decorators import user_passes_test
 from smc.views import logeado,is_audit
 from administracion.models import *
 import MySQLdb
-import os,tempfile
+
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-import datetime
-
-from django.views.static import serve
-from django.utils.encoding import smart_str
 
 from wsgiref.util import FileWrapper
-
-from django.views.static import serve
-from django.utils import timezone
 
 # Create your views here.
 
@@ -38,10 +31,6 @@ def configurarRespaldo(request):
 	return redirect('/gestion/home')
 
 def crearRespaldo(request):
-	respaldo = configuracionBDA.objects.get(id = 1)
-	respaldo.uitima_exportacion = datetime.datetime.now()
-	respaldo.save()
-
 	file_content = ''
 	
 	# Obtenemos la conexion con la base de datos.
@@ -70,20 +59,21 @@ def crearRespaldo(request):
 				file_content += ");"
 		
 	db.close()
-
-	respaldo = configuracionBDA.objects.get(id = 1)
-	respaldo.ultima_exportacion = datetime.datetime.now()
-	respaldo.save()
-
-	name = 'Backup.'+ str(date.today()) + ".sql"
-	file = open(name,'w')
-	file.write(file_content)
-	file.close()
-	filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/" + name
-	filepath = filepath.replace('\\','/')
-	return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
-
-
+	name = 'Backup.'+ str(date.today()) + ".txt" 
+	path = default_storage.save(name, ContentFile(file_content))
+	# print(file_content)
+	# file_path = os.path.join(settings.MEDIA_ROOT, path)
+	# file_name = "Backup " + str(date.today()) + ".txt"
+	# file = open(file_name,'w')
+	# file.write(file_content)
+	# file.close()
+	bitacora = Bitacora(descripcion = 'Importacion')
+	bitacora.save()
+	# return redirect('/gestion/home/')
+	response = HttpResponse(content_type='application/force-download')
+	response['Content-Disposition'] = 'attachment; filename={}'.format(name)
+	response['X-Sendfile'] = path
+	return response
 
 @user_passes_test(is_audit, login_url = '/usuarios/sin_permiso/')
 def cambiarPeriodo(request):
@@ -96,10 +86,4 @@ def cambiarPeriodo(request):
 		 print("¡Correcto!")
 		 return redirect('/gestion/home')
 
-
-def restauracion(request):
-	respaldo = configuracionBDA.objects.get(id = 1)
-	respaldo.ultima_importacion = datetime.datetime.now()
-	respaldo.save()
-	return render(request, "administracion/restaurar.html")
 

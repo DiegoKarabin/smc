@@ -7,7 +7,6 @@ app_name = 'apps'
 urlpatterns = [
 	path('home/', views.home, name = 'home'),
 	path('respaldo/', views.configurarRespaldo, name = 'respaldo'),
-	path('exportar/',views.crearRespaldo, name = 'exportar'),
+	path('table/',views.crearRespaldo, name = 'table'),
 	path('change/',views.cambiarPeriodo, name = 'change'),
-	path('restauracion/', views.restauracion, name = 'restauracion'),
 ]

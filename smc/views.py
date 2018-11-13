@@ -87,6 +87,9 @@ def estadisticas(request):
             'victimas': victimas,
         })
 
+def edit_bloqueado(request):
+    return render(request, 'edit_bloqueado.html')
+
 # def comprobacionRespaldo(request):
     # comp = configuracionBDA.objects.get(id = 1)
     # comp.fecha =

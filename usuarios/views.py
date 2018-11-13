@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
+from django.db import transaction, DatabaseError
 
 from .models import Usuario, Pregunta, PreguntaUsuario
 from . import forms
@@ -63,33 +64,46 @@ def buscar(request):
 
 # @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def modificar_usuario(request, ci):
-    if es_admin(request.user) or request.user.ci == ci:
-        usuario = Usuario.objects.get(ci=ci)
+    usuario = Usuario.objects.get(ci=ci)
 
-        if es_admin(request.user):
-            formulario = forms.UserChangeForm(instance=usuario)
-        else:
-            formulario = forms.UserChangeFormNoAdmin(instance=usuario)
+    if usuario.edit == False:
+        usuario.edit = True
+        usuario.is_editing = request.user.ci
+        usuario.save()
 
-        if request.method == 'POST':
-            if es_admin(request.user):
-                formulario = forms.UserChangeForm(request.POST, instance=usuario)
-            else:
-                # data = dict(request.POST)
-                # data.update(is_active=True)
-                formulario = forms.UserChangeFormNoAdmin(request.POST, instance=usuario)
-
-            if formulario.is_valid():
-                formulario.save()
-                return redirect('/usuarios/ver/' + usuario.ci + '/')
-
-        return render(request, 'usuarios/formulario_usuario.html',
-                      {
-                          'formulario': formulario,
-                          'titulo': 'Modificar usuario ' + usuario.get_full_name()
-                      })
     else:
-        return redirect('/usuarios/sin_permiso/')
+        if usuario.edit == True and request.user.ci == usuario.is_editing:
+
+            if es_admin(request.user) or request.user.ci == ci:
+
+                if es_admin(request.user):
+                    formulario = forms.UserChangeForm(instance=usuario)
+                else:             
+                    formulario = forms.UserChangeFormNoAdmin(instance=usuario)
+
+                if request.method == 'POST':
+                    if es_admin(request.user):
+                        formulario = forms.UserChangeForm(request.POST, instance=usuario)
+                    else:
+                        # data = dict(request.POST)
+                        # data.update(is_active=True)
+                        formulario = forms.UserChangeFormNoAdmin(request.POST, instance=usuario)
+
+                    if formulario.is_valid():
+                        usuario.edit = False
+                        usuario.save()
+                        formulario.save()
+                        return redirect('/usuarios/ver/' + usuario.ci + '/')
+
+                return render(request, 'usuarios/formulario_usuario.html',
+                              {
+                                  'formulario': formulario,
+                                  'titulo': 'Modificar usuario ' + usuario.get_full_name()
+                              })  
+            else:
+                return redirect('/usuarios/sin_permiso/')
+        else:
+            return redirect('/edit_bloqueado.html')
 
 @user_passes_test(es_admin, login_url='/usuarios/sin_permiso/')
 def eliminar_usuario(request, ci):

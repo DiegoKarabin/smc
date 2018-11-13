@@ -59,24 +59,36 @@ def buscar(request):
 def modificar_persona(request, ci):
     persona = Persona.objects.get(ci=ci)
 
-    if request.method == 'POST':
-        formulario = FormularioPersona(request.POST, instance=persona)
+    if persona.edit == False:
+        persona.edit = True
+        persona.is_editing = request.user.ci
+        persona.save()
 
-        if formulario.is_valid():
-            formulario.save()
-            return redirect('/personas/%d/' % ci)
+    else:
+        if persona.edit == True and request.user.ci == persona.is_editing:
 
-    formulario = FormularioPersona(instance=persona)
-    actividades = persona.actividad_set.all()
+          if request.method == 'POST':
+              formulario = FormularioPersona(request.POST, instance=persona)
 
-    return render(request, 'personas/formulario.html',
-                  {
-                      'formulario': formulario,
-                      'titulo': 'Modificar %s %s' % (persona.nombre,
-                                                     persona.apellido),
-                      'ci': ci,
-                      'actividades': actividades,
-                  })
+              if formulario.is_valid():
+                  persona.edit = False
+                  persona.save()
+                  formulario.save()
+                  return redirect('/personas/%d/' % ci)
+
+          formulario = FormularioPersona(instance=persona)
+          actividades = persona.actividad_set.all()
+
+          return render(request, 'personas/formulario.html',
+                        {
+                            'formulario': formulario,
+                            'titulo': 'Modificar %s %s' % (persona.nombre,
+                                                           persona.apellido),
+                            'ci': ci,
+                            'actividades': actividades,
+                        })
+        else:
+          return redirect('/edit_bloqueado.html')
 
 
 @user_passes_test(logeado, login_url='/login/')

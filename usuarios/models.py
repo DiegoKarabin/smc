@@ -9,7 +9,7 @@ class Pregunta(models.Model):
 
 class ManejadorUsuario(BaseUserManager):
 
-    def create_user(self, ci, nombre, apellido, profesion, password=None):
+    def create_user(self, ci, nombre, apellido, profesion, edit, password=None):
         if not ci:
             raise ValueError('El usuario debe tener una identificación')
 
@@ -17,7 +17,8 @@ class ManejadorUsuario(BaseUserManager):
             ci=ci,
             nombre=nombre,
             apellido=apellido,
-            profesion=profesion
+            profesion=profesion,
+            edit=edit
         )
         usuario.set_password(password)
         usuario.save(using=self._db)
@@ -47,6 +48,8 @@ class Usuario(AbstractBaseUser):
     is_active = models.BooleanField('Activo', default=True)
     is_admin = models.BooleanField('Administrador', default=False)
     is_audit = models.BooleanField('Auditor', default=False)
+    edit = models.BooleanField(default=False)
+    is_editing = models.CharField(max_length=9, default=0)
     is_password_setted = models.BooleanField(default=False)
     is_security_question_setted = models.BooleanField(default=False)
     preguntas = models.ManyToManyField(Pregunta, through='PreguntaUsuario')
@@ -65,6 +68,9 @@ class Usuario(AbstractBaseUser):
 
     def get_full_name(self):
         return self.nombre + ' ' + self.apellido
+
+    def get_is_editing(self):
+        return self.is_editing
 
 class PreguntaUsuario(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
