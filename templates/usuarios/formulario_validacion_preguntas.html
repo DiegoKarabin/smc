@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h1>{{ titulo }}</h1>
+			<form id="preguntasForm" method="POST" class="form-control">{% csrf_token %}
+				<label for="pregunta1">{{ pregunta1.pregunta }}</label>
+				{% if errores.pregunta1 %}
+				<div class="alert alert-danger">{{ errores.pregunta1 }}</div>
+				{% endif %}
+				<input type="hidden" name="idPregunta1" value="{{ pregunta1.id }}">
+				<input type="password" name="respuesta1" id="respuesta1" class="form-control">
+				<br>
+				<label for="pregunta2">{{ pregunta2.pregunta }}</label>
+				{% if errores.pregunta2 %}
+				<div class="alert alert-danger">{{ errores.pregunta2 }}</div>
+				{% endif %}
+				<input type="hidden" name="idPregunta2" value="{{ pregunta2.id }}">
+				<input type="password" name="respuesta2" id="respuesta2" class="form-control">
+				<br>
+				<input type="hidden" name="next" value="{{ next }}">
+				<input type="submit" value="Validar" id="btnSubmit" class="btn btn-primary">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block validaciones %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#btnSubmit').click(function(event) {
+			event.preventDefault();
+
+			var error = false;
+
+			$('.alert').remove();
+
+			if (!$('#respuesta1').val()) {
+				$('#respuesta1').before(
+					'<div class="alert alert-danger">Por favor escriba su respuesta</div>');
+				error |= true;
+			}
+
+			if (!$('#respuesta2').val()) {
+				$('#respuesta2').before(
+					'<div class="alert alert-danger">Por favor escriba su respuesta</div>');
+				error |= true;
+			}
+
+			if (!error) {
+				$('#preguntasForm').submit();
+			}
+		});
+	});
+</script>
+{% endblock %}

@@ -114,6 +114,13 @@ def inhabilitar_usuario(request, ci):
 
 @user_passes_test(logeado, login_url='/login/')
 def cambiar_clave(request):
+    if request.user.is_security_question_setted:
+        try:
+            if not request.GET['validado']:
+                return redirect('/usuarios/validar_preguntas?next=/usuarios/cambiar_clave/')
+        except Exception:
+                return redirect('/usuarios/validar_preguntas?next=/usuarios/cambiar_clave/')
+
     formulario = forms.PasswordChangeForm()
 
     if request.method == 'POST':
@@ -155,6 +162,35 @@ def preguntas_seguridad(request):
                   {
                       'titulo': 'Establecer preguntas de seguridad',
                       'preguntas': preguntas,
+                  })
+
+@user_passes_test(logeado, login_url='/login/')
+def validar_preguntas(request):
+    errores = {}
+
+    if request.method == 'POST':
+        pu = PreguntaUsuario.objects.filter(usuario=request.user)
+        pregunta1 = pu[0]
+        pregunta2 = pu[1]
+
+        if not pregunta1.es_respuesta_correcta(request.POST['respuesta1']):
+            errores['pregunta1'] = 'La respuesta que ingreso es incorrecta'
+
+        if not pregunta2.es_respuesta_correcta(request.POST['respuesta2']):
+            errores['pregunta2'] = 'La respuesta que ingreso es incorrecta'
+
+        if not errores:
+            return redirect(request.POST['next'] + '?validado=1')
+
+    preguntas = request.user.preguntas.all()
+
+    return render(request, 'usuarios/formulario_validacion_preguntas.html',
+                  {
+                      'titulo': 'Validar preguntas de seguridad',
+                      'pregunta1': preguntas[0],
+                      'pregunta2': preguntas[1],
+                      'next': request.GET['next'],
+                      'errores': errores,
                   })
 
 def sin_permiso(request):
