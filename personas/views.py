@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from smc.views import logeado
 from causas.models import Causa, Actividad
+from usuarios.models import BitacoraAcceso
 from .models import Persona
 from .forms import FormularioPersona
 
@@ -24,7 +25,7 @@ def agregar_persona(request, nro_expediente):
             BitacoraAcceso.objects.create(
                 usuario=request.user,
                 tabla='personas_persona',
-                registro=persona.id,
+                registro=persona.ci,
                 accion='Insertar'
             )
 
@@ -45,7 +46,7 @@ def ver_persona(request, ci):
         BitacoraAcceso.objects.create(
             usuario=request.user,
             tabla='personas_persona',
-            registro=persona.id,
+            registro=persona.ci,
             accion='Consultar'
         )
     except:
@@ -90,7 +91,7 @@ def modificar_persona(request, ci):
                     BitacoraAcceso.objects.create(
                         usuario=request.user,
                         tabla='personas_persona',
-                        registro=persona.id,
+                        registro=persona.ci,
                         accion='Modificar'
                     )
 
@@ -122,7 +123,7 @@ def eliminar_persona(request, ci):
         BitacoraAcceso.objects.create(
             usuario=request.user,
             tabla='personas_persona',
-            registro=persona.id,
+            registro=persona.ci,
             accion='Eliminar'
         )
         persona.delete()

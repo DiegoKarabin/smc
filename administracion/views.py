@@ -60,7 +60,7 @@ def crearRespaldo(request):
                 file_content += ");"
         
     db.close()
-    name = 'Backup.'+ str(date.today()) + ".txt" 
+    name = 'Backup.'+ str(date.today()) + ".sql" 
     path = default_storage.save(name, ContentFile(file_content))
     # print(file_content)
     # file_path = os.path.join(settings.MEDIA_ROOT, path)
@@ -71,7 +71,7 @@ def crearRespaldo(request):
     bitacora = Bitacora(descripcion = 'Importacion')
     bitacora.save()
     # return redirect('/gestion/home/')
-    response = HttpResponse(content_type='application/force-download')
+    response = HttpResponse(file_content, content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename={}'.format(name)
     response['X-Sendfile'] = path
     return response
@@ -89,10 +89,15 @@ def cambiarPeriodo(request):
 
 @user_passes_test(is_audit, login_url = '/usuarios/sin_permiso')
 def ver_bitacora(request):
-    entradas = BitacoraAcceso.objects.all().order_by('-fecha', '-hora')
+    entradas = BitacoraAcceso.objects.all().order_by('-fecha')
 
     return render(request, 'auditor/bitacora.html',
                   {
                       'titulo': 'Bitácora de Acceso',
                       'entradas': entradas
                   })
+
+# @user_passes_test(is_audit, login_url = '/usuarios/sin_permiso')
+# def procesar_archivo(request):
+#     if request.method == 'POST':
+#         print(request)

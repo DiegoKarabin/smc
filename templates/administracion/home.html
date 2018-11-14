@@ -97,7 +97,7 @@
 							</p>
 							<br>
 							<div class="opciones">
-								<button class="btn btn-success">Descargar Respaldo</button>
+								<button class="btn btn-success" id="btnRespaldo">Descargar Respaldo</button>
 							</div>
 						</div>
 					</a>
@@ -115,9 +115,11 @@
 									<input type="file" class="custom-file-input" id="file" accept=".sql">
 									<label class="custom-file-label" for="file">Seleccione un archivo</label>
 								</div> -->
-								<input type="file" accept=".sql" class="form-control">
-								<br>	
-								<input type="submit" class="btn btn-success" value="Restaurar">
+								<form method="POST"">
+									<input type="file" accept=".sql" class="form-control">
+									<br>	
+									<input type="submit" class="btn btn-success" value="Restaurar">
+								</form>
 							</div>
 						</div>
 					</a>
@@ -153,6 +155,9 @@
 			});
 			$('#btnDesResp').click(function () {
 				$(location).attr('href', '{% url 'gestion:respaldo' %}');
+			});
+			$('#btnRespaldo').click(function () {
+				$(location).attr('href', '{% url 'gestion:table' %}')
 			});
 
 			var periodo = $('#valor-periodo').val();

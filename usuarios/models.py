@@ -11,7 +11,7 @@ class Pregunta(models.Model):
 
 class ManejadorUsuario(BaseUserManager):
 
-    def create_user(self, ci, nombre, apellido, profesion, edit, password=None):
+    def create_user(self, ci, nombre, apellido, profesion, password=None):
         if not ci:
             raise ValueError('El usuario debe tener una identificación')
 
@@ -20,7 +20,6 @@ class ManejadorUsuario(BaseUserManager):
             nombre=nombre,
             apellido=apellido,
             profesion=profesion,
-            edit=edit
         )
         usuario.set_password(password)
         usuario.save(using=self._db)
@@ -88,11 +87,12 @@ class PreguntaUsuario(models.Model):
 class BitacoraAcceso(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     tabla = models.CharField(max_length=80)
-    registro = models.IntegerField()
+    registro = models.CharField(max_length=80)
     accion = models.CharField(max_length=80)
-    fecha = models.DateTimeField(default=date.today)
+    fecha = models.DateTimeField(default=datetime.now)
 
     @property
     def hora(self):
-        return self.fecha.time()
+    	return self.fecha.time()
+    
     

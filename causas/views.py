@@ -44,10 +44,11 @@ def ver_causa(request, nro_expediente):
         BitacoraAcceso.objects.create(
             usuario=request.user,
             tabla='causas_causa',
-            registro=causa.id,
+            registro=causa.nro_expediente,
             accion='Consultar'
         )
-    except:
+    except Exception as e:
+        print(e)
         return render(request, 'causas/no_existe.html')
 
     victimas = causa.personas.get_queryset().filter(condicion=Persona.VICTIMA)
@@ -127,7 +128,7 @@ def modificar_causa(request, nro_expediente):
                     BitacoraAcceso.objects.create(
                         usuario=request.user,
                         tabla='causas_causa',
-                        registro=causa.id,
+                        registro=causa.nro_expediente,
                         accion='Modificar'
                     )
 

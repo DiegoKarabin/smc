@@ -16,19 +16,21 @@
 						<th>Tabla</th>
 						<th>ID Registro</th>
 						<th>Acción</th>
-						<th>Fecha</th>
-						<th>Hora</th>
+						<th>Fecha y Hora</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for entrada in entradas %}
 					<tr>
-						<td>{{ entrada.usuario.ci }}</td>
+						<td>
+							<a href="/usuarios/ver/{{ entrada.usuario.ci }}">
+								{{ entrada.usuario.ci }}
+							</a>
+						</td>
 						<td>{{ entrada.tabla }}</td>
 						<td>{{ entrada.registro }}</td>
 						<td>{{ entrada.accion }}</td>
 						<td>{{ entrada.fecha }}</td>
-						<td>{{ entrada.hora }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
