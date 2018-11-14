@@ -132,7 +132,7 @@ def cambiar_clave(request):
             request.user.set_password(clave)
             request.user.is_password_setted = True
             request.user.save()
-            return redirect('/login/')
+            return redirect('/home/')
 
     return render(request, 'usuarios/cambiar_clave.html',
                   {
