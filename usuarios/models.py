@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password, check_password
 from administracion.models import *
+
+from datetime import datetime
 # Create your models here.
 
 class Pregunta(models.Model):
@@ -82,3 +84,15 @@ class PreguntaUsuario(models.Model):
 
     def es_respuesta_correcta(self, respuesta):
         return check_password(respuesta, self.respuesta)
+
+class BitacoraAcceso(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    tabla = models.CharField(max_length=80)
+    registro = models.IntegerField()
+    accion = models.CharField(max_length=80)
+    fecha = models.DateTimeField(default=date.today)
+
+    @property
+    def hora(self):
+        return self.fecha.time()
+    

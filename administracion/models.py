@@ -13,6 +13,3 @@ class configuracionBDA(models.Model):
 class Bitacora(models.Model):
 	fecha = models.DateField(default = date.today)
 	descripcion = models.CharField(max_length = 15)
-
-	
-

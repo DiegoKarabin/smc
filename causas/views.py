@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import user_passes_test
 
 from smc.views import logeado
 from personas.models import Persona
+from usuarios.models import BitacoraAcceso
 from .models import Causa, Actividad, Triaje
 from .forms import FormularioCausa, FormularioTriaje, FormularioActividad
 
@@ -40,6 +41,12 @@ def ver_causas(request):
 def ver_causa(request, nro_expediente):
     try:
         causa = Causa.objects.get(nro_expediente=nro_expediente)
+        BitacoraAcceso.objects.create(
+            usuario=request.user,
+            tabla='causas_causa',
+            registro=causa.id,
+            accion='Consultar'
+        )
     except:
         return render(request, 'causas/no_existe.html')
 
@@ -81,9 +88,16 @@ def registrar_actividad(request):
         ci = request.POST.get('ci', '')
         descripcion = request.POST.get('descripcion', '')
         persona = Persona.objects.get(ci=ci)
-        Actividad.objects.create(
+        actividad = Actividad.objects.create(
             descripcion=descripcion,
             participante=persona,
+        )
+
+        BitacoraAcceso.objects.create(
+            usuario=request.user,
+            tabla='causas_actividad',
+            registro=actividad.id,
+            accion='Insertar'
         )
 
         return redirect('/personas/' + ci + '/')
@@ -102,21 +116,29 @@ def modificar_causa(request, nro_expediente):
     else:
         if causa.edit == True and request.user.ci == causa.is_editing:
 
-          if request.method == 'POST':
-              formulario = FormularioCausa(request.POST, instance=causa)
+            if request.method == 'POST':
+                formulario = FormularioCausa(request.POST, instance=causa)
 
-              if formulario.is_valid():
-                  causa.edit = False
-                  causa.save()
-                  formulario.save()
-                  return redirect('/causas/ver/' + nro_expediente + '/')
+                if formulario.is_valid():
+                    causa.edit = False
+                    causa.save()
+                    formulario.save()
 
-          formulario = FormularioCausa(instance=causa)
-          victimas = causa.personas.get_queryset().filter(condicion=Persona.VICTIMA)
-          imputados = causa.personas.get_queryset().filter(
+                    BitacoraAcceso.objects.create(
+                        usuario=request.user,
+                        tabla='causas_causa',
+                        registro=causa.id,
+                        accion='Modificar'
+                    )
+
+                    return redirect('/causas/ver/' + nro_expediente + '/')
+
+            formulario = FormularioCausa(instance=causa)
+            victimas = causa.personas.get_queryset().filter(condicion=Persona.VICTIMA)
+            imputados = causa.personas.get_queryset().filter(
               condicion=Persona.IMPUTADO)
 
-          return render(request, 'causas/formulario_causa.html',
+            return render(request, 'causas/formulario_causa.html',
                         {
                             'formulario': formulario,
                             'titulo': 'Modificar ' + nro_expediente,
@@ -134,7 +156,16 @@ def remover_persona(request, ci, nro_expediente):
     persona = Persona.objects.get(ci=ci)
 
     if causa and persona:
+        persona_id = persona.id
         causa.personas.remove(persona)
+
+        BitacoraAcceso.objects.create(
+            usuario=request.user,
+            tabla='personas_persona',
+            registro=persona_id,
+            accion='Eliminar'
+        )
+
         return redirect('/causas/modificar/' + nro_expediente + '/')
 
     return redirect('/causas/ver/' + nro_expediente + '/')
@@ -145,7 +176,15 @@ def eliminar_causa(request, nro_expediente):
     causa = Causa.objects.get(nro_expediente=nro_expediente)
 
     if causa:
+        causa_id = causa.id
         causa.delete()
+
+        BitacoraAcceso.objects.create(
+            usuario=request.user,
+            tabla='causas_causa',
+            registro=causa_id,
+            accion='Eliminar'
+        )
 
     return redirect('/causas/')
 
@@ -161,10 +200,16 @@ def agregar_triaje(request, nro_expediente):
 
             if formulario.is_valid():
                 datos = formulario.cleaned_data
-                Triaje.objects.create(
+                triaje = Triaje.objects.create(
                     causa=causa,
                     atendido_por=request.user.get_full_name(),
                     **datos)
+                BitacoraAcceso.objects.create(
+                    usuario=request.user,
+                    tabla='causas_triaje',
+                    registro=triaje.id,
+                    accion='Insertar'
+                )
                 return redirect('/causas/ver/' + nro_expediente + '/')
 
         return render(request, 'formulario.html',

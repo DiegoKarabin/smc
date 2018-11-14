@@ -19,7 +19,14 @@ def agregar_persona(request, nro_expediente):
         if formulario.is_valid():
             causa = Causa.objects.get(nro_expediente=nro_expediente)
             persona = formulario.cleaned_data
-            causa.personas.create(**persona)
+            persona = causa.personas.create(**persona)
+
+            BitacoraAcceso.objects.create(
+                usuario=request.user,
+                tabla='personas_persona',
+                registro=persona.id,
+                accion='Insertar'
+            )
 
             return redirect('/causas/ver/' + nro_expediente + '/')
 
@@ -34,6 +41,13 @@ def agregar_persona(request, nro_expediente):
 def ver_persona(request, ci):
     try:
         persona = Persona.objects.get(ci=ci)
+
+        BitacoraAcceso.objects.create(
+            usuario=request.user,
+            tabla='personas_persona',
+            registro=persona.id,
+            accion='Consultar'
+        )
     except:
 
         return render(request, 'personas/no_existe.html')
@@ -66,20 +80,27 @@ def modificar_persona(request, ci):
 
     else:
         if persona.edit == True and request.user.ci == persona.is_editing:
+            if request.method == 'POST':
+                formulario = FormularioPersona(request.POST, instance=persona)
 
-          if request.method == 'POST':
-              formulario = FormularioPersona(request.POST, instance=persona)
+                if formulario.is_valid():
+                    persona.edit = False
+                    persona.save()
 
-              if formulario.is_valid():
-                  persona.edit = False
-                  persona.save()
-                  formulario.save()
-                  return redirect('/personas/%d/' % ci)
+                    BitacoraAcceso.objects.create(
+                        usuario=request.user,
+                        tabla='personas_persona',
+                        registro=persona.id,
+                        accion='Modificar'
+                    )
 
-          formulario = FormularioPersona(instance=persona)
-          actividades = persona.actividad_set.all()
+                    formulario.save()
+                    return redirect('/personas/%d/' % ci)
 
-          return render(request, 'personas/formulario.html',
+            formulario = FormularioPersona(instance=persona)
+            actividades = persona.actividad_set.all()
+
+            return render(request, 'personas/formulario.html',
                         {
                             'formulario': formulario,
                             'titulo': 'Modificar %s %s' % (persona.nombre,
@@ -97,6 +118,13 @@ def eliminar_persona(request, ci):
     condicion = persona.condicion
 
     if persona:
+        persona_id = persona.id
+        BitacoraAcceso.objects.create(
+            usuario=request.user,
+            tabla='personas_persona',
+            registro=persona.id,
+            accion='Eliminar'
+        )
         persona.delete()
 
     if condicion == Persona.VICTIMA:

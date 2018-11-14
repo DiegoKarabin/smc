@@ -9,4 +9,5 @@ urlpatterns = [
 	path('respaldo/', views.configurarRespaldo, name = 'respaldo'),
 	path('table/',views.crearRespaldo, name = 'table'),
 	path('change/',views.cambiarPeriodo, name = 'change'),
+	path('bitacora/', views.ver_bitacora, name = 'bitacora'),
 ]

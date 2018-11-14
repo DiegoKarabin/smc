@@ -3,19 +3,30 @@
 {% block content %}
 <div class="container">
 	<div class="row">
-		<div class="col-12">
-			<h2>
-				<i class="text-info fa fa-database"></i>
-				<a href="/gestion/home/">Administrar Base de Datos</a>
-			</h2>
-			<h2>
-				<i class="text-success fa fa-download"></i>
-				<a href="#">Generar respaldo de Base de Datos</a>
-			</h2>
-			<h2>
-				<i class="text-warning fa fa-list"></i>
-				Consultar Bitácora de Acceso
-			</h2>
+		<div class="col-12 text-center">
+			<h1>Menú del Auditor</h1>
+		</div>
+		<div class="col-12 text-center">
+			<div class="list-group">
+				<div class="list-group-item">
+					<h2>
+						<i class="text-info fa fa-database"></i>
+						<a href="{% url 'gestion:home' %}">Configuración de la aplicación</a>
+					</h2>
+				</div>
+				<div class="list-group-item">
+					<h2>
+						<i class="text-success fa fa-download"></i>
+						<a href="#">Generar respaldo de Base de Datos</a>
+					</h2>					
+				</div>
+				<div class="list-group-item">
+					<h2>
+						<i class="text-warning fa fa-clipboard-list"></i>
+						<a href="{% url 'gestion:bitacora' %}">Consultar Bitácora de Acceso</a>
+					</h2>					
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,0 +1,39 @@
+{% extends 'auditor/base.html' %}
+
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-12">
+			<h1>Bitácora de Acceso</h1>
+		</div>
+		<div class="col-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>CI Usuario</th>
+						<th>Tabla</th>
+						<th>ID Registro</th>
+						<th>Acción</th>
+						<th>Fecha</th>
+						<th>Hora</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for entrada in entradas %}
+					<tr>
+						<td>{{ entrada.usuario.ci }}</td>
+						<td>{{ entrada.tabla }}</td>
+						<td>{{ entrada.registro }}</td>
+						<td>{{ entrada.accion }}</td>
+						<td>{{ entrada.fecha }}</td>
+						<td>{{ entrada.hora }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
