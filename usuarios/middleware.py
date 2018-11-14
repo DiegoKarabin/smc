@@ -6,7 +6,7 @@ class ConfigurationMiddleware:
 		self.get_response = get_response
 
 	def __call__(self, request):
-		if request.user.is_authenticated:
+		if request.user.is_authenticated and request.path != '/logout':
 			# if its password is not setted
 			if not request.user.is_password_setted:
 				return cambiar_clave(request)

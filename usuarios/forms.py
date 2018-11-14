@@ -7,7 +7,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ['ci', 'nombre', 'apellido', 'profesion', 'email']
+        fields = ['ci', 'nombre', 'apellido', 'profesion', 'email', 'is_admin', 'is_audit']
 
         widgets = {
             'ci': forms.TextInput(attrs={

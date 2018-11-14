@@ -24,6 +24,8 @@ def index(request):
 
 @user_passes_test(logeado, login_url='/login/')
 def home(request):
+    if request.user.is_audit:
+        return render(request, 'auditor/home.html')
     return render(request, 'causas/home.html')
 
 @user_passes_test(logeado, login_url='/login/')
