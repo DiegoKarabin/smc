@@ -10,4 +10,5 @@ urlpatterns = [
     path('modificar/<int:ci>/', views.modificar_persona),
     path('eliminar/<int:ci>/', views.eliminar_persona),
     path('remover/<int:id>/de/<int:ci>', views.remover_actividad),
+    path('fallas', views.procesar_falla),
 ]

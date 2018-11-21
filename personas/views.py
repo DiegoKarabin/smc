@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponse
+
+import json
 
 from smc.views import logeado
 from causas.models import Causa, Actividad
 from usuarios.models import BitacoraAcceso
+from administracion.models import BitacoraTransaccion
 from .models import Persona
 from .forms import FormularioPersona
 
@@ -69,48 +73,95 @@ def buscar(request):
     else:
         return redirect('/home')
 
+def registrar_transaccion(persona, datos):
+    nro_transaccion = (BitacoraTransaccion.objects
+                                          .filter(accion__icontains='Iniciar')
+                                          .count()) + 1
+    BitacoraTransaccion.objects.create(
+        accion='Iniciar <T{}>'.format(nro_transaccion)
+    )
+
+    for (clave, valor) in datos.items():
+        try:
+            viejo = getattr(persona, clave)
+            nuevo = valor
+
+            if viejo != nuevo:
+                BitacoraTransaccion.objects.create(
+                    accion='Leer',
+                    tabla='personas_persona',
+                    campo=clave,
+                    registro=persona.ci
+                )
+        except AttributeError:
+            pass
+    
+    for (clave, valor) in datos.items():
+        try:
+            viejo = getattr(persona, clave)
+            nuevo = valor
+
+            if viejo != nuevo:
+                BitacoraTransaccion.objects.create(
+                    accion='Escribir',
+                    tabla='personas_persona',
+                    campo=clave,
+                    registro=persona.ci,
+                    valor_anterior=viejo,
+                    valor_actual=nuevo
+                )
+
+            if 'falla_en' in datos.keys() and datos['falla_en'] == clave:
+                return
+        except AttributeError:
+            pass
+
+    BitacoraTransaccion.objects.create(
+        accion='Commit'
+    )
 
 @user_passes_test(logeado, login_url='/login/')
 def modificar_persona(request, ci):
     persona = Persona.objects.get(ci=ci)
 
-    if persona.edit == False:
+    if not persona.edit:
         persona.edit = True
         persona.is_editing = request.user.ci
         persona.save()
+    
+    if persona.edit and request.user.ci == persona.is_editing:
+        if request.method == 'POST':
+            registrar_transaccion(persona, request.POST)
 
+            formulario = FormularioPersona(request.POST, instance=persona)
+
+            if formulario.is_valid():
+                persona.edit = False
+                persona.save()
+
+                BitacoraAcceso.objects.create(
+                    usuario=request.user,
+                    tabla='personas_persona',
+                    registro=persona.ci,
+                    accion='Modificar'
+                )
+
+                formulario.save()
+                return redirect('/personas/%d/' % ci)
+
+        formulario = FormularioPersona(instance=persona)
+        actividades = persona.actividad_set.all()
+
+        return render(request, 'personas/formulario.html',
+                    {
+                        'formulario': formulario,
+                        'titulo': 'Modificar %s %s' % (persona.nombre,
+                                                       persona.apellido),
+                        'ci': ci,
+                        'actividades': actividades,
+                    })
     else:
-        if persona.edit == True and request.user.ci == persona.is_editing:
-            if request.method == 'POST':
-                formulario = FormularioPersona(request.POST, instance=persona)
-
-                if formulario.is_valid():
-                    persona.edit = False
-                    persona.save()
-
-                    BitacoraAcceso.objects.create(
-                        usuario=request.user,
-                        tabla='personas_persona',
-                        registro=persona.ci,
-                        accion='Modificar'
-                    )
-
-                    formulario.save()
-                    return redirect('/personas/%d/' % ci)
-
-            formulario = FormularioPersona(instance=persona)
-            actividades = persona.actividad_set.all()
-
-            return render(request, 'personas/formulario.html',
-                        {
-                            'formulario': formulario,
-                            'titulo': 'Modificar %s %s' % (persona.nombre,
-                                                           persona.apellido),
-                            'ci': ci,
-                            'actividades': actividades,
-                        })
-        else:
-          return redirect('/edit_bloqueado.html')
+      return redirect('/edit_bloqueado.html')
 
 
 @user_passes_test(logeado, login_url='/login/')
@@ -161,3 +212,17 @@ def remover_actividad(request, id, ci):
     if actividad:
         actividad.delete()
         return redirect('/personas/modificar/%d/' % ci)
+
+@user_passes_test(logeado, login_url='login')
+def procesar_falla(request):
+    if request.method == 'POST':
+        persona_ci = request.POST['ci']
+        persona = Persona.objects.get(ci=persona_ci)
+        registrar_transaccion(persona, request.POST)
+
+        return HttpResponse(
+            json.dumps({'redirect_to': '/personas/{}'.format(persona_ci)}),
+            content_type='application/json'
+        )
+    else:
+        return redirect('/home')

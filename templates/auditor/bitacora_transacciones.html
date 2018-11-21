@@ -6,31 +6,29 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1>Bitácora de Acceso</h1>
+            <h1>Bitácora de Transacciones</h1>
         </div>
         <div class="col-12">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>CI Usuario</th>
-                        <th>Tabla</th>
-                        <th>ID Registro</th>
                         <th>Acción</th>
-                        <th>Fecha y Hora</th>
+                        <th>Tabla</th>
+                        <th>Campo</th>
+                        <th>Registro</th>
+                        <th>Valor Anterior</th>
+                        <th>Valor Actual</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for entrada in entradas %}
                     <tr>
-                        <td>
-                            <a href="/usuarios/ver/{{ entrada.usuario.ci }}">
-                                {{ entrada.usuario.ci }}
-                            </a>
-                        </td>
-                        <td>{{ entrada.tabla }}</td>
-                        <td>{{ entrada.registro }}</td>
                         <td>{{ entrada.accion }}</td>
-                        <td>{{ entrada.fecha }}</td>
+                        <td>{{ entrada.tabla }}</td>
+                        <td>{{ entrada.campo }}</td>
+                        <td>{{ entrada.registro }}</td>
+                        <td>{{ entrada.valor_anterior }}</td>
+                        <td>{{ entrada.valor_actual }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

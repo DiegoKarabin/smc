@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import user_passes_test
 from smc.views import logeado,is_audit
 from administracion.models import *
 from usuarios.models import BitacoraAcceso
+from .models import BitacoraTransaccion
 import MySQLdb
 
 from django.core.files.base import ContentFile
@@ -101,3 +102,13 @@ def ver_bitacora(request):
 # def procesar_archivo(request):
 #     if request.method == 'POST':
 #         print(request)
+
+@user_passes_test(is_audit, login_url = '/usuarios/sin_permiso')
+def ver_bitacora_transacciones(request):
+    entradas = BitacoraTransaccion.objects.all().order_by('id')
+
+    return render(request, 'auditor/bitacora_transacciones.html',
+                  {
+                      'titulo': 'Bitácora de Acceso',
+                      'entradas': entradas
+                  })

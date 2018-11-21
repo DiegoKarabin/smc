@@ -13,3 +13,12 @@ class configuracionBDA(models.Model):
 class Bitacora(models.Model):
 	fecha = models.DateField(default = date.today)
 	descripcion = models.CharField(max_length = 15)
+
+class BitacoraTransaccion(models.Model):
+	fecha = models.DateField(default = date.today)
+	accion = models.CharField(max_length=80)
+	tabla = models.CharField(max_length=80, blank=True)
+	campo = models.CharField(max_length=80, blank=True)
+	registro = models.CharField(max_length=80, blank=True)
+	valor_anterior = models.CharField(max_length=80, blank=True)
+	valor_actual = models.CharField(max_length = 80, blank=True)

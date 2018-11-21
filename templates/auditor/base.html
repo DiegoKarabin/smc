@@ -3,54 +3,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	{% block estaticos %}
-	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-	<link rel="stylesheet" href="{% static 'fonts/css/fontawesome-all.min.css' %}">
-	<style media="screen">
-		.enlace { color: #000 }
-		.enlace:hover { color: --blue }
-	</style>
-	{% endblock %}
-	<title>{% block titulo %}SMC{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    {% block estaticos %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/css/fontawesome-all.min.css' %}">
+    <style media="screen">
+        .enlace { color: #000 }
+        .enlace:hover { color: --blue }
+    </style>
+    {% endblock %}
+    <title>{% block titulo %}SMC{% endblock %}</title>
 </head>
 <body>
-	<nav class="navbar navbar-dark navbar-expand-lg bg-primary" style="margin-bottom: 20px;">
-		<a href="/home" class="navbar-brand">SMC-EIVCM</a>
+    <nav class="navbar navbar-dark navbar-expand-lg bg-primary" style="margin-bottom: 20px;">
+        <a href="/home" class="navbar-brand">SMC-EIVCM</a>
 
-		<ul class="nav nav-pills ml-auto">
-			<li class="nav-item dropdown">
+        <ul class="nav nav-pills ml-auto">
+            <li class="nav-item dropdown">
 
-			<a a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #fff; margin-right: 35px;">
-				{{ user.get_full_name }}
-			</a>
+            <a a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="color: #fff; margin-right: 35px;">
+                {{ user.get_full_name }}
+            </a>
 
-			<ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-				<li class="dropdown-item">
-					<a class="dropdown-link" href="/usuarios/ver/{{ user.ci }}/">
-						Ver Perfil
-					</a>
-				</li>
-				<li class="dropdown-item">
-					<a class="dropdown-link" href="/usuarios/cambiar_clave/">
-						Cambiar Contraseña
-					</a>
-				</li>
-				<div class="dropdown-divider"></div>
-				<li class="dropdown-item">
-					<a class="dropdown-link" href="/logout">
-						Cerrar Sesión
-					</a>
-				</li>
-			</ul>
-			</li>
-		</ul>
-	</nav>
-	{% block content %}{% endblock %}
+            <ul class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                <li class="dropdown-item">
+                    <a class="dropdown-link" href="/usuarios/ver/{{ user.ci }}/">
+                        Ver Perfil
+                    </a>
+                </li>
+                <li class="dropdown-item">
+                    <a class="dropdown-link" href="/usuarios/cambiar_clave/">
+                        Cambiar Contraseña
+                    </a>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li class="dropdown-item">
+                    <a class="dropdown-link" href="/logout">
+                        Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+            </li>
+        </ul>
+    </nav>
+    {% block content %}{% endblock %}
 
-	<script src="{% static 'js/jquery.min.js' %}"></script>
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-	{% block scripts %}{% endblock %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

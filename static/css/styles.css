@@ -1,0 +1,30 @@
+.btn-falla {
+    position: fixed;
+    right: 10px;
+    top: 100px;
+    color: #fff !important;
+}
+
+.modal-falla {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.modal-falla.fallo .modal-dialog {
+    border-color: #f5cbc6;
+}
+
+.modal-falla.fallo .modal-dialog .modal-content {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f5cbc6;
+}
+
+.modal-falla.exito .modal-dialog {
+    border-color: #c3e6cb;
+}
+
+.modal-falla.exito .modal-dialog .modal-content {
+    border-color: #c3e6cb;
+    background: #d4edda;
+    color: #155724;
+}
